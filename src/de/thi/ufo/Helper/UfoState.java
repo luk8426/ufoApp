@@ -1,4 +1,4 @@
-package de.thi.ufo.App;
+package de.thi.ufo.Helper;
 
 public enum UfoState {
 	STARTED,

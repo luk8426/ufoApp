@@ -7,34 +7,40 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import de.thi.ufo.App.RoundedPanel;
+import de.thi.ufo.App.UfoApp;
 
 import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
+
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JProgressBar;
+import javax.swing.ImageIcon;
 
-public class ControlView extends UfoView{
-	public JFrame frame; // To be removed
+public class ControlView{
+	//public JFrame frame; // To be removed
+	private UfoApp app;
+	public Container content_pane;
 	private JTextField norden_text;
 	private JTextField osten_text;
-	private JTextField höhe_text;
+	private JTextField hoehe_text;
 	private JTextField textField;
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	public ControlView() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 800);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(2, 0));
+	public ControlView(UfoApp p_app) {
+		app = p_app;
+		content_pane = new Container();
+		content_pane.setLayout(new GridLayout(2, 0));
 		
 // Here starts the upper Part of the App-Screen
 
 		JPanel upper_panel = new JPanel();
-		frame.getContentPane().add(upper_panel);
+		//frame.getContentPane().add(upper_panel);
+		content_pane.add(upper_panel);
 		upper_panel.setLayout(null);
 		
 		JPanel blue_frame_upper = new RoundedPanel(35);
@@ -50,7 +56,9 @@ public class ControlView extends UfoView{
 // Here starts the lower Part of the App-Screen
 	
 		JPanel lower_panel = new JPanel();
-		frame.getContentPane().add(lower_panel);
+//		frame.getContentPane().add(lower_panel);
+		content_pane.add(lower_panel);
+
 		lower_panel.setLayout(null);
 		
 		JPanel blue_frame_lower = new RoundedPanel(35);
@@ -75,15 +83,45 @@ public class ControlView extends UfoView{
 		
 		JPanel icons_panel = new JPanel();
 		status_panel_top.add(icons_panel);
-		icons_panel.setLayout(new GridLayout(1, 2, 5, 0));
+		icons_panel.setLayout(new GridLayout(1, 2, 10, 0));
 		
 		JPanel warnings_panel = new JPanel();
 		warnings_panel.setLayout(new GridLayout(1, 3, 3, 0));
 		icons_panel.add(warnings_panel);
 		
+		JLabel lblNewLabel = new JLabel();
+		lblNewLabel.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/battery_low_gray.png")));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		warnings_panel.add(lblNewLabel);
+		
+		JLabel lblNewLabel_2 = new JLabel();
+		lblNewLabel_2.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/arrow-limit-grey.png")));
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.RIGHT);
+		warnings_panel.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_1 = new JLabel();
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/obstacle-gray.png")));
+		warnings_panel.add(lblNewLabel_1);
+		
 		JPanel stateicons_panel = new JPanel();
 		stateicons_panel.setLayout(new GridLayout(1, 3, 3, 0));
 		icons_panel.add(stateicons_panel);
+		
+		JLabel lblNewLabel_4 = new JLabel();
+		lblNewLabel_4.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/marker-check-gray.png")));
+		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
+		stateicons_panel.add(lblNewLabel_4);
+		
+		JLabel lblNewLabel_3 = new JLabel();
+		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_3.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-gray.png")));
+		stateicons_panel.add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_5 = new JLabel();
+		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_5.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/airplane-green.png")));
+		stateicons_panel.add(lblNewLabel_5);
 		
 		// Create Data Panel
 		JPanel data_panel = new JPanel();
@@ -105,11 +143,11 @@ public class ControlView extends UfoView{
 		remaining_distance_label_txt.setHorizontalAlignment(SwingConstants.LEFT);
 		data_panel.add(remaining_distance_label_txt);
 		JProgressBar progress_bar = new JProgressBar();
-		progress_bar.setValue(20);
 		progress_bar.setForeground(new Color(43, 120, 228));
+		progress_bar.setValue(20);
 		data_panel.add(progress_bar);
 		
-		JLabel altitude_txt = new JLabel("Flughöhe");
+		JLabel altitude_txt = new JLabel("Flughoehe");
 		altitude_txt.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		altitude_txt.setHorizontalAlignment(SwingConstants.LEFT);
 		data_panel.add(altitude_txt);
@@ -131,7 +169,8 @@ public class ControlView extends UfoView{
 		vertical_txt.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		vertical_txt.setHorizontalAlignment(SwingConstants.LEFT);
 		data_panel.add(vertical_txt);
-		JLabel vertical_val = new JLabel("0km/h");
+		JLabel vertical_val = new JLabel("");
+		vertical_val.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/up-arrow-blue.png")));
 		vertical_val.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		vertical_val.setHorizontalAlignment(SwingConstants.RIGHT);
 		data_panel.add(vertical_val);

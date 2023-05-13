@@ -3,35 +3,30 @@ package de.thi.ufo.App;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import java.awt.GridLayout;
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import javax.swing.ImageIcon;
-import javax.swing.SwingConstants;
 
+import de.thi.ufo.Model.UfoModel;
+import de.thi.ufo.Views.ControlView;
 import de.thi.ufo.Views.StartView;
-import de.thi.ufo.Views.UfoView;
-
-import java.awt.Insets;
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.CardLayout;
-import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JTextField;
+import de.thi.ufo.Views.TargetView;
 
 public class UfoApp {
+	public JFrame frame = new JFrame();
+	public StartView start_view = new StartView(this);
+	public TargetView target_view = new TargetView(this);
+	public ControlView control_view = new ControlView(this);
+	public UfoModel ufo_model = new UfoModel();
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		UfoApp app = new UfoApp();
+		app.frame.setBounds(100, 100, 450, 800);
+		app.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UfoView current_view = new StartView();
-					current_view.frame.setVisible(true);
+					//app.frame.setContentPane(app.start_view.;
+					app.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

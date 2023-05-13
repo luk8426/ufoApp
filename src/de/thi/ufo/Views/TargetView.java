@@ -1,41 +1,43 @@
 package de.thi.ufo.Views;
 
-import javax.swing.JFrame;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
-import java.awt.GridBagLayout;
 import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
 import de.thi.ufo.App.RoundedPanel;
+import de.thi.ufo.App.UfoApp;
 
-import java.awt.Insets;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.Container;
+
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-public class TargetView extends UfoView{
-	public JFrame frame; // To be removed
+public class TargetView{
+	public UfoApp app; // To be removed
+	public Container content_pane;
 	private JTextField norden_text;
 	private JTextField osten_text;
-	private JTextField höhe_text;
+	private JTextField hoehe_text;
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	public TargetView() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 800);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(2, 0));
+	public TargetView(UfoApp p_app) {
+		app = p_app;
+		//frame.setBounds(100, 100, 450, 800);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.getContentPane().setLayout(new GridLayout(2, 0));
+		content_pane = new Container();
+		content_pane.setLayout(new GridLayout(2, 0));
 		
 // Here starts the upper Part of the App-Screen
 
 		JPanel upper_panel = new JPanel();
-		frame.getContentPane().add(upper_panel);
+		//frame.getContentPane().add(upper_panel);
+		content_pane.add(upper_panel);
 		upper_panel.setLayout(null);
 		
 		JPanel blue_frame_upper = new RoundedPanel(35);
@@ -51,7 +53,8 @@ public class TargetView extends UfoView{
 // Here starts the lower Part of the App-Screen
 	
 		JPanel lower_panel = new JPanel();
-		frame.getContentPane().add(lower_panel);
+		//frame.getContentPane().add(lower_panel);
+		content_pane.add(lower_panel);
 		lower_panel.setLayout(null);
 		
 		JPanel blue_frame_lower = new RoundedPanel(35);
@@ -105,25 +108,25 @@ public class TargetView extends UfoView{
 		osten_panel.add(osten_text);
 		osten_text.setColumns(10);
 		
-		JLabel flughöhe_label = new JLabel("Flugh\u00F6he in m");
-		flughöhe_label.setFont(new Font("Comic Sans MS", Font.BOLD | Font.ITALIC, 24));
-		zieleingabe_panel.add(flughöhe_label);
+		JLabel flughoehe_label = new JLabel("Flugh\u00F6he in m");
+		flughoehe_label.setFont(new Font("Comic Sans MS", Font.BOLD | Font.ITALIC, 24));
+		zieleingabe_panel.add(flughoehe_label);
 		
-		JPanel höhe_panel = new JPanel();
-		zieleingabe_panel.add(höhe_panel);
-		höhe_panel.setLayout(new GridLayout(1, 2, 5, 0));
+		JPanel hoehe_panel = new JPanel();
+		zieleingabe_panel.add(hoehe_panel);
+		hoehe_panel.setLayout(new GridLayout(1, 2, 5, 0));
 		
-		JLabel sollhöhe_label = new JLabel("Soll-H\u00F6he: ");
-		sollhöhe_label.setHorizontalAlignment(SwingConstants.RIGHT);
-		sollhöhe_label.setFont(new Font("Comic Sans MS", Font.ITALIC, 23));
-		höhe_panel.add(sollhöhe_label);
+		JLabel sollhoehe_label = new JLabel("Soll-H\u00F6he: ");
+		sollhoehe_label.setHorizontalAlignment(SwingConstants.RIGHT);
+		sollhoehe_label.setFont(new Font("Comic Sans MS", Font.ITALIC, 23));
+		hoehe_panel.add(sollhoehe_label);
 		
-		höhe_text = new JTextField();
-		höhe_text.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
-		höhe_text.setForeground(new Color(192, 192, 192));
-		höhe_text.setText("30");
-		höhe_panel.add(höhe_text);
-		höhe_text.setColumns(10);
+		hoehe_text = new JTextField();
+		hoehe_text.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
+		hoehe_text.setForeground(new Color(192, 192, 192));
+		hoehe_text.setText("30");
+		hoehe_panel.add(hoehe_text);
+		hoehe_text.setColumns(10);
 		
 		JPanel button_panel = new JPanel();
 		zieleingabe_panel.add(button_panel);
@@ -132,6 +135,10 @@ public class TargetView extends UfoView{
 		JButton update_btn = new JButton("Update");
 		button_panel.add(update_btn);
 		JButton start_btn = new JButton("Start");
+		start_btn.addActionListener(e -> {
+			app.frame.setContentPane(app.control_view.content_pane);
+			app.frame.revalidate();
+		});
 		button_panel.add(start_btn);
 	}
 }
