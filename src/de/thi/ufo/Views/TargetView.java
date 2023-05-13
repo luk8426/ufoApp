@@ -10,6 +10,7 @@ import javax.swing.SwingConstants;
 
 import de.thi.ufo.App.RoundedPanel;
 import de.thi.ufo.App.UfoApp;
+import de.thi.ufo.Helper.UfoState;
 
 import java.awt.Font;
 import java.awt.BorderLayout;
@@ -169,6 +170,8 @@ public class TargetView{
 			zielanzeige_panel.remove(top_layered_pane);
 			app.frame.setContentPane(app.control_view.content_pane);
 			app.control_view.zielanzeige_panel.add(top_layered_pane);
+			app.sim.setSpeedup(1);
+			app.ufo_model.state = UfoState.STARTED;
 			app.frame.revalidate();
 		});
 		button_panel.add(start_btn);

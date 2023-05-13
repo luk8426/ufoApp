@@ -26,6 +26,9 @@ public class ControlView{
 	public Container content_pane;
 	private JLayeredPane top_layered_pane;
 	public JPanel zielanzeige_panel;
+	
+	private JLabel altitude_val;
+	private JLabel velocity_val;
 
 	/**
 	 * Initialize the contents of the frame.
@@ -151,7 +154,7 @@ public class ControlView{
 		altitude_txt.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		altitude_txt.setHorizontalAlignment(SwingConstants.LEFT);
 		data_panel.add(altitude_txt);
-		JLabel altitude_val = new JLabel(Double.toString(app.sim.getZ()) + " m");
+		altitude_val = new JLabel(Double.toString(app.sim.getZ()) + " m");
 		altitude_val.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		altitude_val.setHorizontalAlignment(SwingConstants.RIGHT);
 		data_panel.add(altitude_val);
@@ -160,7 +163,7 @@ public class ControlView{
 		velocity_txt.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		velocity_txt.setHorizontalAlignment(SwingConstants.LEFT);
 		data_panel.add(velocity_txt);
-		JLabel velocity_val = new JLabel(Integer.toString(app.sim.getV()) + " km/h");
+		velocity_val = new JLabel(Integer.toString(app.sim.getV()) + " km/h");
 		velocity_val.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		velocity_val.setHorizontalAlignment(SwingConstants.RIGHT);
 		data_panel.add(velocity_val);
@@ -183,7 +186,10 @@ public class ControlView{
 		battery_bar.setValue(100);
 		battery_bar.setForeground(new Color(0, 128, 0));
 		data_panel.add(battery_bar);
-		
+	}
+	public void update() {
+		altitude_val.setText(Double.toString(Math.round(app.sim.getZ() * 100.0) / 100.0) + " m");
+		velocity_val.setText(Double.toString(Math.round(app.sim.getV() * 100.0) / 100.0) + " km/h");
 	}
 }
 

@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 import de.thi.ufo.UfoSim;
+import de.thi.ufo.Helper.UfoState;
 import de.thi.ufo.Model.UfoModel;
 import de.thi.ufo.Views.ControlView;
 import de.thi.ufo.Views.StartView;
@@ -31,7 +32,32 @@ public class UfoApp {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+
 			}
 		});
+		app.sim.openViewWindow();
+		
+		while(app.ufo_model.state != UfoState.TERMINATED) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			app.frame.repaint();
+			switch(app.ufo_model.state) {
+				case STARTED:
+					app.control_view.update();
+					app.sim.setI(90);
+					app.sim.requestDeltaV(10);	
+					if(app.sim.getZ()>20) app.ufo_model.state = UfoState.TERMINATED;
+					break;
+				case STOPPED:
+					continue;
+				case ARRIVED:
+					break;
+			}
+		}
+		//*/
 	}
 }
