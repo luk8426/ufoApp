@@ -10,6 +10,7 @@ import javax.swing.SwingConstants;
 
 import de.thi.ufo.App.RoundedPanel;
 import de.thi.ufo.App.UfoApp;
+import de.thi.ufo.Helper.Simple3DPoint;
 
 import java.awt.Insets;
 import java.awt.Font;
@@ -158,9 +159,18 @@ public class StartView{
 		
 		JButton check_btn = new JButton("Ziel \u00FCberpr\u00FCfen");
 		check_btn.addActionListener(e -> {
-			
-			app.frame.setContentPane(app.target_view.content_pane);
-			app.frame.revalidate();
+			// Set Destination in Model
+			try {
+				app.ufo_model.positions.setDestination(new Simple3DPoint(Integer.parseInt(osten_text.getText()), Integer.parseInt(norden_text.getText())));
+				app.ufo_model.positions.setDesiredAltitude(Integer.parseInt(hoehe_text.getText()));
+			}catch (NumberFormatException exception) {
+				return;
+			}
+			if (app.ufo_model.positions.isDestinationValid()) {
+				app.target_view.update();
+				app.frame.setContentPane(app.target_view.content_pane);
+				app.frame.revalidate();
+			}
 		});
 		zieleingabe_panel.add(check_btn);
 		

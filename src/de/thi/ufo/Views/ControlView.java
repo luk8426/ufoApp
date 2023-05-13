@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.SwingConstants;
 
 import de.thi.ufo.App.RoundedPanel;
@@ -23,10 +24,8 @@ public class ControlView{
 	//public JFrame frame; // To be removed
 	private UfoApp app;
 	public Container content_pane;
-	private JTextField norden_text;
-	private JTextField osten_text;
-	private JTextField hoehe_text;
-	private JTextField textField;
+	private JLayeredPane top_layered_pane;
+	public JPanel zielanzeige_panel;
 
 	/**
 	 * Initialize the contents of the frame.
@@ -35,6 +34,7 @@ public class ControlView{
 		app = p_app;
 		content_pane = new Container();
 		content_pane.setLayout(new GridLayout(2, 0));
+		top_layered_pane = app.target_view.top_layered_pane;
 		
 // Here starts the upper Part of the App-Screen
 
@@ -48,10 +48,10 @@ public class ControlView{
 		blue_frame_upper.setLayout(null);
 		upper_panel.add(blue_frame_upper);
 		
-		JPanel zielanzeige_panel = new JPanel();
+		zielanzeige_panel = new JPanel();
 		zielanzeige_panel.setBounds(20, 11, 371, 347);
 		blue_frame_upper.add(zielanzeige_panel);
-		zielanzeige_panel.setLayout(new GridLayout(7, 0, 0, 0));
+		zielanzeige_panel.setLayout(null);
 		
 // Here starts the lower Part of the App-Screen
 	
@@ -151,7 +151,7 @@ public class ControlView{
 		altitude_txt.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		altitude_txt.setHorizontalAlignment(SwingConstants.LEFT);
 		data_panel.add(altitude_txt);
-		JLabel altitude_val = new JLabel("0m");
+		JLabel altitude_val = new JLabel(Double.toString(app.sim.getZ()) + " m");
 		altitude_val.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		altitude_val.setHorizontalAlignment(SwingConstants.RIGHT);
 		data_panel.add(altitude_val);
@@ -160,7 +160,7 @@ public class ControlView{
 		velocity_txt.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		velocity_txt.setHorizontalAlignment(SwingConstants.LEFT);
 		data_panel.add(velocity_txt);
-		JLabel velocity_val = new JLabel("0km/h");
+		JLabel velocity_val = new JLabel(Integer.toString(app.sim.getV()) + " km/h");
 		velocity_val.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		velocity_val.setHorizontalAlignment(SwingConstants.RIGHT);
 		data_panel.add(velocity_val);

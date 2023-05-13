@@ -4,12 +4,14 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
+import de.thi.ufo.UfoSim;
 import de.thi.ufo.Model.UfoModel;
 import de.thi.ufo.Views.ControlView;
 import de.thi.ufo.Views.StartView;
 import de.thi.ufo.Views.TargetView;
 
 public class UfoApp {
+	public UfoSim sim = UfoSim.getInstance();
 	public JFrame frame = new JFrame();
 	public StartView start_view = new StartView(this);
 	public TargetView target_view = new TargetView(this);
@@ -25,7 +27,6 @@ public class UfoApp {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					//app.frame.setContentPane(app.start_view.;
 					app.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
