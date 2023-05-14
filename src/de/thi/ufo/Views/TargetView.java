@@ -11,6 +11,7 @@ import javax.swing.SwingConstants;
 import de.thi.ufo.App.RoundedPanel;
 import de.thi.ufo.App.UfoApp;
 import de.thi.ufo.Helper.UfoState;
+import de.thi.ufo.Model.UfoPositions;
 
 import java.awt.Font;
 import java.awt.BorderLayout;
@@ -168,6 +169,7 @@ public class TargetView{
 		JButton start_btn = new JButton("Start");
 		start_btn.addActionListener(e -> {
 			zielanzeige_panel.remove(top_layered_pane);
+			app.control_view.absolute_distance_label_val.setText(Double.toString(Math.round(app.ufo_model.positions.getInitalDistance() * 100.0) / 100.0) + " m");
 			app.frame.setContentPane(app.control_view.content_pane);
 			app.control_view.zielanzeige_panel.add(top_layered_pane);
 			app.sim.setSpeedup(1);
@@ -182,8 +184,8 @@ public class TargetView{
 		osten_text.setText(Double.toString(app.ufo_model.positions.getDestination().getX()));
 		norden_text.setText(Double.toString(app.ufo_model.positions.getDestination().getY()));
 		dest.setBounds(
-				(int)Math.round(app.ufo_model.positions.getDestination().getX())+170, 
-				(int)Math.round(app.ufo_model.positions.getDestination().getY()*(-1))+170, 
+				UfoPositions.positionInMap(app.ufo_model.positions.getDestination().getX()), 
+				UfoPositions.positionInMap(app.ufo_model.positions.getDestination().getY()), 
 				dest.getBounds().height, 
 				dest.getBounds().width);
 	}

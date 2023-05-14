@@ -39,12 +39,21 @@ public class Simple3DPoint {
 		x = p_z;
 	}
 	
-	public double horizontalDistanceFromOrigin() {
-		Simple3DPoint p = new Simple3DPoint(0, 0, 0);
+	public double horizontalDistanceTo(Simple3DPoint p) {
 		return Math.sqrt(Math.pow(p.getX() - x, 2) + Math.pow(p.getY() - y, 2));
 	}
-
-	public double horizontalDistance(Simple3DPoint p) {
-		return Math.sqrt(Math.pow(p.getX() - x, 2) + Math.pow(p.getY() - y, 2));
+	
+	public double totalDistanceTo(Simple3DPoint p) {
+		return horizontalDistanceTo(p) + Math.abs(p.z-this.z);
+	}
+	
+	public double horizontalDistanceFromOrigin() {
+		Simple3DPoint p = new Simple3DPoint(0, 0, 0);
+		return horizontalDistanceTo(p);
+	}
+	
+	public double totalDistanceFromOrigin() {
+		Simple3DPoint p = new Simple3DPoint(0, 0, 0);
+		return totalDistanceTo(p);
 	}
 }

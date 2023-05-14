@@ -161,7 +161,7 @@ public class StartView{
 		check_btn.addActionListener(e -> {
 			// Set Destination in Model
 			try {
-				app.ufo_model.positions.setDestination(new Simple3DPoint(Integer.parseInt(osten_text.getText()), Integer.parseInt(norden_text.getText())));
+				app.ufo_model.positions.setDestination(new Simple3DPoint(Integer.parseInt(osten_text.getText()),-Integer.parseInt(norden_text.getText())));
 				app.ufo_model.positions.setDesiredAltitude(Integer.parseInt(hoehe_text.getText()));
 			}catch (NumberFormatException exception) {
 				return;

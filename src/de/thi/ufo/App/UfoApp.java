@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 import de.thi.ufo.UfoSim;
+import de.thi.ufo.Helper.Simple3DPoint;
 import de.thi.ufo.Helper.UfoState;
 import de.thi.ufo.Model.UfoModel;
 import de.thi.ufo.Views.ControlView;
@@ -38,19 +39,21 @@ public class UfoApp {
 		app.sim.openViewWindow();
 		boolean once = false;
 		boolean twice = false;
+		boolean xx = false;
+
 		while(app.ufo_model.state != UfoState.TERMINATED) {
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			app.frame.repaint();
 			switch(app.ufo_model.state) {
 				case STARTED:
+					app.sim.setD((int) app.ufo_model.positions.horizontalOrientationToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())));
 					app.control_view.update();
 					if (!once) {
-						app.sim.setI(90);
+						
 						app.sim.requestDeltaV(50);	
 						once = true;
 					}
@@ -58,16 +61,24 @@ public class UfoApp {
 					if(app.sim.getZ()>10) {
 						if (!twice) {
 							app.sim.setI(0);
-							app.sim.setD(180);
 						}
 						twice = true;
 					}
-						//app.ufo_model.state = UfoState.TERMINATED;
+					if(app.ufo_model.positions.horizontalDistanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())) < 1)
+						app.sim.setI(-90);
+					if(app.ufo_model.positions.distanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())) < 1){
+						app.ufo_model.state = UfoState.ARRIVED;	
+					}
 					break;
 				case STOPPED:
-					continue;
-				case ARRIVED:
+					app.control_view.update();
 					break;
+				case ARRIVED:
+					app.sim.requestDeltaV(0);	
+					app.control_view.update();
+					break;
+			default:
+				break;
 			}
 		}
 		System.exit(1);
