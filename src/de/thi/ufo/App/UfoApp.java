@@ -36,7 +36,8 @@ public class UfoApp {
 			}
 		});
 		app.sim.openViewWindow();
-		
+		boolean once = false;
+		boolean twice = false;
 		while(app.ufo_model.state != UfoState.TERMINATED) {
 			try {
 				Thread.sleep(10);
@@ -48,9 +49,20 @@ public class UfoApp {
 			switch(app.ufo_model.state) {
 				case STARTED:
 					app.control_view.update();
-					app.sim.setI(90);
-					app.sim.requestDeltaV(10);	
-					if(app.sim.getZ()>20) app.ufo_model.state = UfoState.TERMINATED;
+					if (!once) {
+						app.sim.setI(90);
+						app.sim.requestDeltaV(50);	
+						once = true;
+					}
+						
+					if(app.sim.getZ()>10) {
+						if (!twice) {
+							app.sim.setI(0);
+							app.sim.setD(180);
+						}
+						twice = true;
+					}
+						//app.ufo_model.state = UfoState.TERMINATED;
 					break;
 				case STOPPED:
 					continue;
@@ -58,6 +70,7 @@ public class UfoApp {
 					break;
 			}
 		}
+		System.exit(1);
 		//*/
 	}
 }

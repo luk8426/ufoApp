@@ -9,6 +9,7 @@ import javax.swing.SwingConstants;
 
 import de.thi.ufo.App.RoundedPanel;
 import de.thi.ufo.App.UfoApp;
+import de.thi.ufo.Helper.RotateIcon;
 
 import java.awt.Font;
 import java.awt.BorderLayout;
@@ -29,6 +30,9 @@ public class ControlView{
 	
 	private JLabel altitude_val;
 	private JLabel velocity_val;
+	private JLabel vertical_val;
+	private JProgressBar battery_bar;
+	private RotateIcon ufo_icon;
 
 	/**
 	 * Initialize the contents of the frame.
@@ -55,6 +59,11 @@ public class ControlView{
 		zielanzeige_panel.setBounds(20, 11, 371, 347);
 		blue_frame_upper.add(zielanzeige_panel);
 		zielanzeige_panel.setLayout(null);
+		
+		// Make additions to the map
+		
+		ufo_icon = new RotateIcon();
+		top_layered_pane.add(ufo_icon, 0);
 		
 // Here starts the lower Part of the App-Screen
 	
@@ -172,8 +181,8 @@ public class ControlView{
 		vertical_txt.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		vertical_txt.setHorizontalAlignment(SwingConstants.LEFT);
 		data_panel.add(vertical_txt);
-		JLabel vertical_val = new JLabel("");
-		vertical_val.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/up-arrow-blue.png")));
+		vertical_val = new JLabel("");
+		vertical_val.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/down-arrow-blue.png")));
 		vertical_val.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		vertical_val.setHorizontalAlignment(SwingConstants.RIGHT);
 		data_panel.add(vertical_val);
@@ -182,14 +191,43 @@ public class ControlView{
 		battery_txt.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		battery_txt.setHorizontalAlignment(SwingConstants.LEFT);
 		data_panel.add(battery_txt);
-		JProgressBar battery_bar = new JProgressBar();
+		battery_bar = new JProgressBar();
 		battery_bar.setValue(100);
+		battery_bar.setStringPainted(true);
 		battery_bar.setForeground(new Color(0, 128, 0));
 		data_panel.add(battery_bar);
 	}
+	
 	public void update() {
 		altitude_val.setText(Double.toString(Math.round(app.sim.getZ() * 100.0) / 100.0) + " m");
 		velocity_val.setText(Double.toString(Math.round(app.sim.getV() * 100.0) / 100.0) + " km/h");
+		vertical_val.setIcon(verticalIcon());
+		updateBatteryBar();
+		checkWarnings();
+		updateUfoIcon();
+	}
+	
+	private void updateUfoIcon() {
+		ufo_icon.setRotation(app.sim.getD());
+		ufo_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/navigation-blue.png")));
+		ufo_icon.setBounds((int)app.sim.getX() + 170, (int)app.sim.getY() + 170, 50, 50);				
+}
+
+	private void updateBatteryBar() {
+		battery_bar.setValue((int) (100 * (1-(app.sim.getDist()/3000))));
+		if (battery_bar.getValue() < 10) battery_bar.setForeground(new Color(136, 8, 8));
+		else if (battery_bar.getValue() < 20) battery_bar.setForeground(new Color(255,165,0));
+	}
+
+	private void checkWarnings() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private ImageIcon verticalIcon() {
+		if(app.sim.getV()==0) 		return (new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/straight-arrow-blue.png")));
+		else if(app.sim.getI()<0) 	return (new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/down-arrow-blue.png")));
+		else 						return (new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/up-arrow-blue.png")));
 	}
 }
 
