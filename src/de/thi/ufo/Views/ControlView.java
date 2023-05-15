@@ -2,6 +2,10 @@ package de.thi.ufo.Views;
 
 import javax.swing.JFrame;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -24,7 +28,7 @@ import javax.swing.JTextField;
 import javax.swing.JProgressBar;
 import javax.swing.ImageIcon;
 
-public class ControlView{
+public class ControlView {
 	//public JFrame frame; // To be removed
 	private UfoApp app;
 	public Container content_pane;
@@ -47,7 +51,10 @@ public class ControlView{
 	private JProgressBar battery_bar;
 	private JProgressBar progress_bar;
 	
+	// Top Icons & Buttons
 	private RotateIcon ufo_icon;
+	private JLabel stop_btn;
+	private JLabel return_btn;
 
 	/**
 	 * Initialize the contents of the frame.
@@ -78,8 +85,22 @@ public class ControlView{
 		// Make additions to the map
 		
 		ufo_icon = new RotateIcon();
-		top_layered_pane.add(ufo_icon, 0);
+		stop_btn = new JLabel();
+		stop_btn.addMouseListener((MouseListener) new MouseAdapter()  
+		{  
+		    public void mouseClicked(MouseEvent e)  
+		    {  
+		    	stop_btn.setIcon(null);	
+
+		    }  
+		}); 
+		return_btn = new JLabel();
 		
+		top_layered_pane.add(ufo_icon, 0);
+		top_layered_pane.add(stop_btn, 0);
+		top_layered_pane.add(return_btn, 0);
+
+				
 // Here starts the lower Part of the App-Screen
 	
 		JPanel lower_panel = new JPanel();
@@ -222,6 +243,14 @@ public class ControlView{
 		updateProgressBar();
 		checkWarnings();
 		updateUfoIcon();
+		updateButtons();
+	}
+
+	private void updateButtons() {
+		stop_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-red.png")));
+		stop_btn.setBounds(120, 280, 60, 60);
+		return_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-red.png")));
+		return_btn.setBounds(120, 280, 60, 60);			
 	}
 
 	private void updateUfoIcon() {
@@ -244,7 +273,7 @@ public class ControlView{
 	}
 
 	private void checkWarnings() {
-		switch(app.ufo_model.state) {
+		switch(app.ufo_model.ufo_state) {
 		case STARTED:
 			flying_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/airplane-green.png")));
 			stop_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-gray.png")));
@@ -258,6 +287,7 @@ public class ControlView{
 		case ARRIVED:
 			flying_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/airplane-gray.png")));
 			dest_reached_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/marker-check-green.png")));
+			ufo_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/navigation-green.png")));
 		default:
 			break;
 		}
@@ -270,9 +300,9 @@ public class ControlView{
 	}
 
 	private ImageIcon verticalIcon() {
-		if(app.sim.getV()==0) 		return (new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/straight-arrow-blue.png")));
-		else if(app.sim.getI()<0) 	return (new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/down-arrow-blue.png")));
-		else 						return (new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/up-arrow-blue.png")));
+		if(app.sim.getI()==0 || app.sim.getV()==0) 		return (new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/straight-arrow-blue.png")));
+		else if(app.sim.getI()<0) 						return (new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/down-arrow-blue.png")));
+		else 											return (new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/up-arrow-blue.png")));
 	}
 }
 

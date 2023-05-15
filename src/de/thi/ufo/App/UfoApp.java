@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 import de.thi.ufo.UfoSim;
+import de.thi.ufo.Helper.FlyState;
 import de.thi.ufo.Helper.Simple3DPoint;
 import de.thi.ufo.Helper.UfoState;
 import de.thi.ufo.Model.UfoModel;
@@ -41,40 +42,65 @@ public class UfoApp {
 		boolean twice = false;
 		boolean xx = false;
 
-		while(app.ufo_model.state != UfoState.TERMINATED) {
+		while(app.ufo_model.ufo_state != UfoState.TERMINATED) {
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			app.frame.repaint();
-			switch(app.ufo_model.state) {
+			switch(app.ufo_model.ufo_state) {
 				case STARTED:
-					app.sim.setD((int) app.ufo_model.positions.horizontalOrientationToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())));
-					app.control_view.update();
-					if (!once) {
-						
-						app.sim.requestDeltaV(50);	
-						once = true;
-					}
-						
-					if(app.sim.getZ()>10) {
-						if (!twice) {
-							app.sim.setI(0);
+					switch(app.ufo_model.fly_state) {
+					case WAITING:
+						app.sim.requestDeltaV(10);	
+						app.sim.setD((int) app.ufo_model.positions.horizontalOrientationToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())));
+						app.ufo_model.fly_state = FlyState.TAKEOFF;
+						break;
+					case TAKEOFF:
+						if (app.sim.getZ()>=10) {
+							app.sim.requestDeltaV(40); // Now at total speed of 50 km/h	
+							app.ufo_model.fly_state = FlyState.ASCENDING;
 						}
-						twice = true;
+						break;
+					case ASCENDING:
+						if (app.sim.getZ()>=app.ufo_model.positions.getDesiredAltitude()) {
+							app.sim.setI(0);	
+							app.ufo_model.fly_state = FlyState.FLYING;
+						}
+						break;
+					case FLYING:
+						app.sim.setD((int) app.ufo_model.positions.horizontalOrientationToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())));
+						if (app.ufo_model.positions.horizontalDistanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())) < 1) {
+							app.sim.setI(-90);
+							app.ufo_model.fly_state = FlyState.DESCENDING;
+						}
+						break;
+					case DESCENDING:
+						if (app.sim.getZ()<=30) {
+							app.sim.requestDeltaV(-49); // Now at total speed of 1 km/h	
+							app.ufo_model.fly_state = FlyState.LANDING;
+						}
+						break;
+					case LANDING:
+						if (app.sim.getZ()<=0) {
+							app.sim.setI(0);
+							app.sim.requestDeltaV(-40); // Now at total speed of 0 km/h	
+							app.ufo_model.fly_state = FlyState.LANDED;
+						}
+						break;
+					case LANDED:
+						app.ufo_model.ufo_state = UfoState.ARRIVED;	
+						break;
+					default:
+						break;
 					}
-					if(app.ufo_model.positions.horizontalDistanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())) < 1)
-						app.sim.setI(-90);
-					if(app.ufo_model.positions.distanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())) < 1){
-						app.ufo_model.state = UfoState.ARRIVED;	
-					}
+					app.control_view.update();
 					break;
 				case STOPPED:
 					app.control_view.update();
 					break;
 				case ARRIVED:
-					app.sim.requestDeltaV(0);	
 					app.control_view.update();
 					break;
 			default:

@@ -173,7 +173,7 @@ public class TargetView{
 			app.frame.setContentPane(app.control_view.content_pane);
 			app.control_view.zielanzeige_panel.add(top_layered_pane);
 			app.sim.setSpeedup(1);
-			app.ufo_model.state = UfoState.STARTED;
+			app.ufo_model.ufo_state = UfoState.STARTED;
 			app.frame.revalidate();
 		});
 		button_panel.add(start_btn);
