@@ -53,8 +53,8 @@ public class ControlView {
 	
 	// Top Icons & Buttons
 	private RotateIcon ufo_icon;
-	private JLabel stop_btn;
-	private JLabel return_btn;
+	private JButton stop_btn;
+	private JButton return_btn;
 
 	/**
 	 * Initialize the contents of the frame.
@@ -68,7 +68,7 @@ public class ControlView {
 // Here starts the upper Part of the App-Screen
 
 		JPanel upper_panel = new JPanel();
-		//frame.getContentPane().add(upper_panel);
+		upper_panel.setBackground(Color.WHITE);
 		content_pane.add(upper_panel);
 		upper_panel.setLayout(null);
 		
@@ -85,16 +85,18 @@ public class ControlView {
 		// Make additions to the map
 		
 		ufo_icon = new RotateIcon();
-		stop_btn = new JLabel();
-		stop_btn.addMouseListener((MouseListener) new MouseAdapter()  
-		{  
-		    public void mouseClicked(MouseEvent e)  
-		    {  
-		    	stop_btn.setIcon(null);	
-
-		    }  
-		}); 
-		return_btn = new JLabel();
+		stop_btn = new JButton();
+		stop_btn.setBorderPainted(false);
+		stop_btn.setContentAreaFilled(false);
+		stop_btn.addActionListener(e -> {
+			app.ufo_model.stop_requested = true;
+		});
+		return_btn = new JButton();
+		return_btn.setBorderPainted(false);
+		return_btn.setContentAreaFilled(false);
+		stop_btn.addActionListener(e -> {
+			// Do nothing yet
+		});
 		
 		top_layered_pane.add(ufo_icon, 0);
 		top_layered_pane.add(stop_btn, 0);
@@ -104,7 +106,7 @@ public class ControlView {
 // Here starts the lower Part of the App-Screen
 	
 		JPanel lower_panel = new JPanel();
-//		frame.getContentPane().add(lower_panel);
+		lower_panel.setBackground(Color.WHITE);
 		content_pane.add(lower_panel);
 
 		lower_panel.setLayout(null);
@@ -123,6 +125,8 @@ public class ControlView {
 		JPanel status_panel_top = new JPanel();
 		status_panel.add(status_panel_top, BorderLayout.PAGE_START);
 		status_panel_top.setLayout(new GridLayout(2, 0, 0, 0));
+		status_panel_top.setBackground(Color.WHITE);
+
 		
 		JLabel status_label = new JLabel("Status");
 		status_label.setFont(new Font("Comic Sans MS", Font.BOLD, 34));
@@ -132,14 +136,18 @@ public class ControlView {
 		JPanel icons_panel = new JPanel();
 		status_panel_top.add(icons_panel);
 		icons_panel.setLayout(new GridLayout(1, 2, 10, 0));
+		icons_panel.setBackground(Color.WHITE);
+
 		
 		JPanel warnings_panel = new JPanel();
 		warnings_panel.setLayout(new GridLayout(1, 3, 3, 0));
+		warnings_panel.setBackground(Color.WHITE);
 		icons_panel.add(warnings_panel);
 		
 		battery_low_icon = new JLabel();
 		battery_low_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/battery_low_gray.png")));
 		battery_low_icon.setHorizontalAlignment(SwingConstants.CENTER);
+		
 		warnings_panel.add(battery_low_icon);
 		
 		alt_limit_icon = new JLabel();
@@ -154,6 +162,7 @@ public class ControlView {
 		
 		JPanel stateicons_panel = new JPanel();
 		stateicons_panel.setLayout(new GridLayout(1, 3, 3, 0));
+		stateicons_panel.setBackground(Color.WHITE);
 		icons_panel.add(stateicons_panel);
 		
 		dest_reached_icon = new JLabel();
@@ -173,13 +182,16 @@ public class ControlView {
 		
 		// Create Data Panel
 		JPanel data_panel = new JPanel();
+		data_panel.setBackground(new Color(255, 255, 255));
 		status_panel.add(data_panel, BorderLayout.CENTER);
+		status_panel.setBackground(Color.WHITE);
 		data_panel.setLayout(new GridLayout(6, 2, 0, 0));
 		
 		// Labels for Data
 		JLabel absolute_distance_label_txt = new JLabel("Gesamtdistanz");
 		absolute_distance_label_txt.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 		absolute_distance_label_txt.setHorizontalAlignment(SwingConstants.LEFT);
+		absolute_distance_label_txt.setBackground(Color.WHITE);
 		data_panel.add(absolute_distance_label_txt);
 		absolute_distance_label_val = new JLabel("360m");
 		absolute_distance_label_val.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
@@ -241,16 +253,8 @@ public class ControlView {
 		vertical_val.setIcon(verticalIcon());
 		updateBatteryBar();
 		updateProgressBar();
-		checkWarnings();
+		checkWarningsAndButtons();
 		updateUfoIcon();
-		updateButtons();
-	}
-
-	private void updateButtons() {
-		stop_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-red.png")));
-		stop_btn.setBounds(120, 280, 60, 60);
-		return_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-red.png")));
-		return_btn.setBounds(120, 280, 60, 60);			
 	}
 
 	private void updateUfoIcon() {
@@ -272,19 +276,26 @@ public class ControlView {
 		else if (battery_bar.getValue() < 20) battery_bar.setForeground(new Color(255,165,0));
 	}
 
-	private void checkWarnings() {
+	private void checkWarningsAndButtons() {
 		switch(app.ufo_model.ufo_state) {
 		case STARTED:
+			System.out.println("Test");
 			flying_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/airplane-green.png")));
 			stop_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-gray.png")));
 			dest_reached_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/marker-check-gray.png")));
-
+			stop_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-red.png")));
+			stop_btn.setBounds(120, 280, 60, 60);
+			return_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-red.png")));
+			return_btn.setBounds(210, 280, 60, 60);	
 			break;
 		case STOPPED:
+			System.out.println("Black?");
+			stop_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-black.png")));
 			flying_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/airplane-gray.png")));
 			stop_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-red.png")));
 			break;
 		case ARRIVED:
+			stop_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-black.png")));
 			flying_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/airplane-gray.png")));
 			dest_reached_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/marker-check-green.png")));
 			ufo_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/navigation-green.png")));

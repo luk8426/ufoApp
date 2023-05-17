@@ -1,5 +1,6 @@
 package de.thi.ufo.App;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -14,12 +15,22 @@ import de.thi.ufo.Views.StartView;
 import de.thi.ufo.Views.TargetView;
 
 public class UfoApp {
-	public UfoSim sim = UfoSim.getInstance();
-	public JFrame frame = new JFrame();
-	public StartView start_view = new StartView(this);
-	public TargetView target_view = new TargetView(this);
-	public ControlView control_view = new ControlView(this);
-	public UfoModel ufo_model = new UfoModel();
+	public UfoSim sim;
+	public JFrame frame;
+	public StartView start_view;
+	public TargetView target_view;
+	public ControlView control_view;
+	public UfoModel ufo_model;
+	
+	public UfoApp() {
+		sim = UfoSim.getInstance();
+		frame = new JFrame();
+		start_view = new StartView(this);
+		target_view = new TargetView(this);
+		control_view = new ControlView(this);
+		ufo_model = new UfoModel(this);	
+	}
+	
 	/**
 	 * Launch the application.
 	 */
@@ -38,9 +49,6 @@ public class UfoApp {
 			}
 		});
 		app.sim.openViewWindow();
-		boolean once = false;
-		boolean twice = false;
-		boolean xx = false;
 
 		while(app.ufo_model.ufo_state != UfoState.TERMINATED) {
 			try {
@@ -53,13 +61,15 @@ public class UfoApp {
 				case STARTED:
 					switch(app.ufo_model.fly_state) {
 					case WAITING:
-						app.sim.requestDeltaV(10);	
+						//app.sim.requestDeltaV(10);	
+						app.ufo_model.speedhandler.setTargetSpeed(10);
 						app.sim.setD((int) app.ufo_model.positions.horizontalOrientationToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())));
 						app.ufo_model.fly_state = FlyState.TAKEOFF;
 						break;
 					case TAKEOFF:
 						if (app.sim.getZ()>=10) {
-							app.sim.requestDeltaV(40); // Now at total speed of 50 km/h	
+							//app.sim.requestDeltaV(40); // Now at total speed of 50 km/h	
+							app.ufo_model.speedhandler.setTargetSpeed(50);
 							app.ufo_model.fly_state = FlyState.ASCENDING;
 						}
 						break;
@@ -78,14 +88,16 @@ public class UfoApp {
 						break;
 					case DESCENDING:
 						if (app.sim.getZ()<=30) {
-							app.sim.requestDeltaV(-49); // Now at total speed of 1 km/h	
+							//app.sim.requestDeltaV(-49); // Now at total speed of 1 km/h	
+							app.ufo_model.speedhandler.setTargetSpeed(1);
 							app.ufo_model.fly_state = FlyState.LANDING;
 						}
 						break;
 					case LANDING:
 						if (app.sim.getZ()<=0) {
 							app.sim.setI(0);
-							app.sim.requestDeltaV(-40); // Now at total speed of 0 km/h	
+							app.ufo_model.speedhandler.setTargetSpeed(0);
+							//app.sim.requestDeltaV(-40); // Now at total speed of 0 km/h	
 							app.ufo_model.fly_state = FlyState.LANDED;
 						}
 						break;
@@ -96,8 +108,18 @@ public class UfoApp {
 						break;
 					}
 					app.control_view.update();
+					if(app.ufo_model.stop_requested) {
+						//app.ufo_model.velocity_before_stopped = app.sim.getV();
+							app.ufo_model.speedhandler.setTargetSpeed(0);
+						if ((app.ufo_model.fly_state != FlyState.WAITING)&& app.sim.getV()<1)	app.ufo_model.ufo_state = UfoState.STOPPED;
+					}
+						
 					break;
 				case STOPPED:
+					if (!app.ufo_model.stop_requested) {
+						app.sim.setSpeedup(1);
+						app.ufo_model.ufo_state = UfoState.STARTED;
+					}
 					app.control_view.update();
 					break;
 				case ARRIVED:

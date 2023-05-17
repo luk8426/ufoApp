@@ -41,7 +41,7 @@ public class RoundedPanel extends JPanel {
             area.intersect(new Area(createRoundBottomRight()));
         }
         Area inner_area = (Area) area.clone();
-        inner_area = enlargeSlightlyInPlace(inner_area, 0.99f);
+        inner_area = enlargeSlightlyInPlace(inner_area, 0.97f);
         area.subtract(inner_area);
         g2.fill(area);
         g2.dispose();

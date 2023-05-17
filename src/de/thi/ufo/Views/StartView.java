@@ -32,13 +32,9 @@ public class StartView{
 	 */
 	public StartView(UfoApp p_app) {
 		app = p_app;
-		//frame.setBounds(100, 100, 450, 800);
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		content_pane = app.frame.getContentPane();
-		//frame.getContentPane().setLayout(new GridLayout(2, 0));
 		content_pane.setLayout(new GridLayout(2, 0));		
 		JPanel willkommen_top_panel = new JPanel();
-		//frame.getContentPane().add(willkommen_top_panel);
 		content_pane.add(willkommen_top_panel);
 		GridBagLayout gbl_willkommen_top_panel = new GridBagLayout();
 		gbl_willkommen_top_panel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -46,6 +42,7 @@ public class StartView{
 		gbl_willkommen_top_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_willkommen_top_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		willkommen_top_panel.setLayout(gbl_willkommen_top_panel);
+		willkommen_top_panel.setBackground(Color.WHITE);
 		
 		JLabel ufo_icon_start = new JLabel("");
 		ufo_icon_start.setHorizontalAlignment(SwingConstants.CENTER);
@@ -82,6 +79,7 @@ public class StartView{
 		willkommen_top_panel.add(app_name_label, gbc_app_name_label);
 		
 		JPanel lower_panel = new JPanel();
+		lower_panel.setBackground(new Color(255, 255, 255));
 		//frame.getContentPane().add(lower_panel);
 		content_pane.add(lower_panel);
 		lower_panel.setLayout(null);
@@ -92,6 +90,7 @@ public class StartView{
 		blue_frame.setLayout(null);
 		
 		JPanel zieleingabe_panel = new JPanel();
+		zieleingabe_panel.setBackground(new Color(255, 255, 255));
 		zieleingabe_panel.setBounds(21, 11, 371, 347);
 		blue_frame.add(zieleingabe_panel);
 		zieleingabe_panel.setLayout(new GridLayout(7, 0, 0, 0));
@@ -106,6 +105,7 @@ public class StartView{
 		zieleingabe_panel.add(entfernungen_label);
 		
 		JPanel norden_panel = new JPanel();
+		norden_panel.setBackground(new Color(255, 255, 255));
 		zieleingabe_panel.add(norden_panel);
 		norden_panel.setLayout(new GridLayout(1, 2, 5, 0));
 		
@@ -122,6 +122,7 @@ public class StartView{
 		norden_text.setColumns(10);
 		
 		JPanel osten_panel = new JPanel();
+		osten_panel.setBackground(new Color(255, 255, 255));
 		zieleingabe_panel.add(osten_panel);
 		osten_panel.setLayout(new GridLayout(1, 2, 5, 0));
 		
@@ -142,6 +143,7 @@ public class StartView{
 		zieleingabe_panel.add(flughoehe_label);
 		
 		JPanel hoehe_panel = new JPanel();
+		hoehe_panel.setBackground(new Color(255, 255, 255));
 		zieleingabe_panel.add(hoehe_panel);
 		hoehe_panel.setLayout(new GridLayout(1, 2, 5, 0));
 		
@@ -158,6 +160,7 @@ public class StartView{
 		hoehe_text.setColumns(10);
 		
 		JButton check_btn = new JButton("Ziel \u00FCberpr\u00FCfen");
+		check_btn.setBackground(new Color(255, 255, 255));
 		check_btn.addActionListener(e -> {
 			// Set Destination in Model
 			try {

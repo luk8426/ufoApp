@@ -38,7 +38,6 @@ public class UfoPositions {
 	public double horizontalOrientationToDestination(Simple3DPoint current_position) {
 		double orientation = (Math.atan2(UfoPositions.positionInMap(destination.getY())-UfoPositions.positionInMap(current_position.getY()), UfoPositions.positionInMap(destination.getX())-UfoPositions.positionInMap(current_position.getX()))*360/(2*Math.PI));
 		if (orientation<0) orientation += 360;
-		System.out.println(orientation);
 		return orientation; 
 	}
 	
