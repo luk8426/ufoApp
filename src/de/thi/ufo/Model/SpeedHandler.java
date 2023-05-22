@@ -15,7 +15,7 @@ public class SpeedHandler extends Thread implements Runnable {
 	
 	@Override
 	public void run() {
-		while(app.ufo_model.ufo_state != UfoState.TERMINATED) {
+		while(app.ufo_model.getUfoState() != UfoState.TERMINATED) {
 			int delta = this.target_speed - app.sim.getV();
 			if (Math.abs(delta) >= 1) {
 				app.sim.requestDeltaV(delta);

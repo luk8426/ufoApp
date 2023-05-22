@@ -22,6 +22,7 @@ public class UfoApp {
 	public ControlView control_view;
 	public UfoModel ufo_model;
 	
+	
 	public UfoApp() {
 		sim = UfoSim.getInstance();
 		frame = new JFrame();
@@ -44,53 +45,52 @@ public class UfoApp {
 					app.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
-				}
+				}	
 
 			}
 		});
 		app.sim.openViewWindow();
-
-		while(app.ufo_model.ufo_state != UfoState.TERMINATED) {
+		while(app.ufo_model.getUfoState() != UfoState.TERMINATED) {
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			app.frame.repaint();
-			switch(app.ufo_model.ufo_state) {
+			switch(app.ufo_model.getUfoState()) {
 				case STARTED:
-					switch(app.ufo_model.fly_state) {
+					switch(app.ufo_model.getFlyState()) {
 					case WAITING:
 						//app.sim.requestDeltaV(10);	
 						app.ufo_model.speedhandler.setTargetSpeed(10);
 						app.sim.setD((int) app.ufo_model.positions.horizontalOrientationToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())));
-						app.ufo_model.fly_state = FlyState.TAKEOFF;
+						app.ufo_model.setFlyState(FlyState.TAKEOFF);
 						break;
 					case TAKEOFF:
 						if (app.sim.getZ()>=10) {
 							//app.sim.requestDeltaV(40); // Now at total speed of 50 km/h	
 							app.ufo_model.speedhandler.setTargetSpeed(50);
-							app.ufo_model.fly_state = FlyState.ASCENDING;
+							app.ufo_model.setFlyState(FlyState.ASCENDING);
 						}
 						break;
 					case ASCENDING:
 						if (app.sim.getZ()>=app.ufo_model.positions.getDesiredAltitude()) {
 							app.sim.setI(0);	
-							app.ufo_model.fly_state = FlyState.FLYING;
+							app.ufo_model.setFlyState(FlyState.FLYING);
 						}
 						break;
 					case FLYING:
 						app.sim.setD((int) app.ufo_model.positions.horizontalOrientationToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())));
 						if (app.ufo_model.positions.horizontalDistanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())) < 1) {
 							app.sim.setI(-90);
-							app.ufo_model.fly_state = FlyState.DESCENDING;
+							app.ufo_model.setFlyState(FlyState.DESCENDING);
 						}
 						break;
 					case DESCENDING:
 						if (app.sim.getZ()<=30) {
 							//app.sim.requestDeltaV(-49); // Now at total speed of 1 km/h	
 							app.ufo_model.speedhandler.setTargetSpeed(1);
-							app.ufo_model.fly_state = FlyState.LANDING;
+							app.ufo_model.setFlyState(FlyState.LANDING);
 						}
 						break;
 					case LANDING:
@@ -98,27 +98,29 @@ public class UfoApp {
 							app.sim.setI(0);
 							app.ufo_model.speedhandler.setTargetSpeed(0);
 							//app.sim.requestDeltaV(-40); // Now at total speed of 0 km/h	
-							app.ufo_model.fly_state = FlyState.LANDED;
+							app.ufo_model.setFlyState(FlyState.LANDED);
 						}
 						break;
 					case LANDED:
-						app.ufo_model.ufo_state = UfoState.ARRIVED;	
+						app.ufo_model.setUfoState(UfoState.ARRIVED);	
 						break;
 					default:
 						break;
 					}
 					app.control_view.update();
-					if(app.ufo_model.stop_requested) {
-						//app.ufo_model.velocity_before_stopped = app.sim.getV();
-							app.ufo_model.speedhandler.setTargetSpeed(0);
-						if ((app.ufo_model.fly_state != FlyState.WAITING)&& app.sim.getV()<1)	app.ufo_model.ufo_state = UfoState.STOPPED;
+					/*if(app.ufo_model.stop_requested) {
+						app.ufo_model.stop_requested = !app.ufo_model.stop_requested;
+						app.ufo_model.speed_before_stop = app.sim.getV();
+						app.ufo_model.speedhandler.setTargetSpeed(0);
 					}
-						
+					if ((app.ufo_model.getLoopsInCurrentState()>2)&&(app.ufo_model.getFlyState() != FlyState.WAITING)&&(app.sim.getV()<1))	app.ufo_model.setUfoState(UfoState.STOPPED);
+					*/
 					break;
 				case STOPPED:
-					if (!app.ufo_model.stop_requested) {
-						app.sim.setSpeedup(1);
-						app.ufo_model.ufo_state = UfoState.STARTED;
+					if (app.ufo_model.continue_requested) {
+						app.ufo_model.continue_requested = !app.ufo_model.continue_requested;
+						app.ufo_model.speedhandler.setTargetSpeed(app.ufo_model.speed_before_stop);
+						app.ufo_model.setUfoState(UfoState.STARTED);
 					}
 					app.control_view.update();
 					break;
@@ -128,6 +130,7 @@ public class UfoApp {
 			default:
 				break;
 			}
+			app.ufo_model.setLoopsInCurrentState((app.ufo_model.getLoopsInCurrentState()+1)%10000);
 		}
 		System.exit(1);
 		//*/

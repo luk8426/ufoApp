@@ -2,6 +2,7 @@ package de.thi.ufo.Views;
 
 import javax.swing.JFrame;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -10,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import de.thi.ufo.App.RoundedPanel;
 import de.thi.ufo.App.UfoApp;
@@ -55,6 +57,9 @@ public class ControlView {
 	private RotateIcon ufo_icon;
 	private JButton stop_btn;
 	private JButton return_btn;
+	
+	// Warnings
+	private JLabel warningLabel;
 
 	/**
 	 * Initialize the contents of the frame.
@@ -82,6 +87,13 @@ public class ControlView {
 		blue_frame_upper.add(zielanzeige_panel);
 		zielanzeige_panel.setLayout(null);
 		
+		warningLabel = new JLabel("");
+		warningLabel.setBounds(0, 0, 371, 42);
+		warningLabel.setBackground(new Color(176,224,230, 170));
+		warningLabel.setForeground(Color.RED);
+		warningLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		top_layered_pane.add(warningLabel, 0);
+		
 		// Make additions to the map
 		
 		ufo_icon = new RotateIcon();
@@ -89,18 +101,20 @@ public class ControlView {
 		stop_btn.setBorderPainted(false);
 		stop_btn.setContentAreaFilled(false);
 		stop_btn.addActionListener(e -> {
-			app.ufo_model.stop_requested = true;
+			if (app.ufo_model.getUfoState() == UfoState.STARTED)	app.ufo_model.stop_requested = true;
+			else if(app.ufo_model.getUfoState() == UfoState.STOPPED) app.ufo_model.continue_requested = true;
 		});
 		return_btn = new JButton();
 		return_btn.setBorderPainted(false);
 		return_btn.setContentAreaFilled(false);
-		stop_btn.addActionListener(e -> {
-			// Do nothing yet
+		return_btn.addActionListener(e -> {
+			app.ufo_model.positions.setDestination(new Simple3DPoint(0, 0));
+			return_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/airplane-green.png")));
 		});
 		
-		top_layered_pane.add(ufo_icon, 0);
-		top_layered_pane.add(stop_btn, 0);
-		top_layered_pane.add(return_btn, 0);
+		top_layered_pane.add(ufo_icon, 1);
+		top_layered_pane.add(stop_btn, 1);
+		top_layered_pane.add(return_btn, 1);
 
 				
 // Here starts the lower Part of the App-Screen
@@ -206,6 +220,8 @@ public class ControlView {
 		progress_bar.setForeground(new Color(43, 120, 228));
 		progress_bar.setStringPainted(true);
 		progress_bar.setValue(20);
+		progress_bar.setBackground(Color.white);
+		progress_bar.setBorder(new EmptyBorder(5, 20, 5, 0));
 		data_panel.add(progress_bar);
 		
 		JLabel altitude_txt = new JLabel("Flughoehe");
@@ -244,6 +260,8 @@ public class ControlView {
 		battery_bar.setValue(100);
 		battery_bar.setStringPainted(true);
 		battery_bar.setForeground(new Color(0, 128, 0));
+		battery_bar.setBackground(Color.white);
+		battery_bar.setBorder(new EmptyBorder(5, 20, 5, 0));
 		data_panel.add(battery_bar);
 	}
 	
@@ -272,12 +290,18 @@ public class ControlView {
 
 	private void updateBatteryBar() {
 		battery_bar.setValue((int) (100 * (1-(app.sim.getDist()/3000))));
-		if (battery_bar.getValue() < 10) battery_bar.setForeground(new Color(136, 8, 8));
+		if (battery_bar.getValue() < 10) {
+			battery_bar.setForeground(new Color(136, 8, 8));
+			warningLabel.setOpaque(true);
+			warningLabel.setText("Caution! - Low Battery!");
+			
+		}
 		else if (battery_bar.getValue() < 20) battery_bar.setForeground(new Color(255,165,0));
 	}
 
 	private void checkWarningsAndButtons() {
-		switch(app.ufo_model.ufo_state) {
+		if(warningLabel.getText()=="") warningLabel.setOpaque(false);
+		switch(app.ufo_model.getUfoState()) {
 		case STARTED:
 			System.out.println("Test");
 			flying_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/airplane-green.png")));
@@ -290,24 +314,38 @@ public class ControlView {
 			break;
 		case STOPPED:
 			System.out.println("Black?");
-			stop_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-black.png")));
+			stop_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/play-button-inner-green.png")));
 			flying_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/airplane-gray.png")));
 			stop_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-red.png")));
+			warningLabel.setOpaque(true);
+			warningLabel.setText("Stopping the vehicle ...");
+			
 			break;
 		case ARRIVED:
 			stop_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-black.png")));
 			flying_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/airplane-gray.png")));
 			dest_reached_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/marker-check-green.png")));
 			ufo_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/navigation-green.png")));
+			warningLabel.setOpaque(true);
+			warningLabel.setText("The vehicle has arrived");
 		default:
 			break;
 		}
 		if (battery_bar.getValue() < 10) battery_low_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/battery_low_red.png")));
 		else battery_low_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/battery_low_gray.png")));
-		if (app.sim.getZ() >= UfoPositions.MAX_ALTITUDE) alt_limit_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/arrow-limit-red.png")));
+		if (app.sim.getZ() >= UfoPositions.MAX_ALTITUDE) {
+			alt_limit_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/arrow-limit-red.png")));
+			warningLabel.setOpaque(true);
+			warningLabel.setText("Caution! Max. altitude exeeded!");
+
+		}
 		else alt_limit_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/arrow-limit-gray.png")));
-		//if RADAR obstacle_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/obstacle_color.png"))); else
-		obstacle_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/obstacle-gray.png")));	
+		if (app.sim.getRadar()!=-1) {
+			obstacle_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/obstacle-color.png")));
+			warningLabel.setOpaque(true);
+			warningLabel.setText("Object detected, taking a detour!");
+		}
+		else obstacle_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/obstacle-gray.png")));	
 	}
 
 	private ImageIcon verticalIcon() {
