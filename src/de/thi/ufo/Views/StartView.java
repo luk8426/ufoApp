@@ -7,6 +7,8 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import de.thi.ufo.App.RoundedPanel;
 import de.thi.ufo.App.UfoApp;
@@ -16,6 +18,7 @@ import java.awt.Insets;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -36,47 +39,33 @@ public class StartView{
 		content_pane.setLayout(new GridLayout(2, 0));		
 		JPanel willkommen_top_panel = new JPanel();
 		content_pane.add(willkommen_top_panel);
-		GridBagLayout gbl_willkommen_top_panel = new GridBagLayout();
-		gbl_willkommen_top_panel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_willkommen_top_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_willkommen_top_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_willkommen_top_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		willkommen_top_panel.setLayout(gbl_willkommen_top_panel);
+		//GridBagLayout gbl_willkommen_top_panel = new GridBagLayout();
+		//gbl_willkommen_top_panel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		//gbl_willkommen_top_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+		//gbl_willkommen_top_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		//gbl_willkommen_top_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		willkommen_top_panel.setLayout(null);
 		willkommen_top_panel.setBackground(Color.WHITE);
 		
 		JLabel ufo_icon_start = new JLabel("");
 		ufo_icon_start.setHorizontalAlignment(SwingConstants.CENTER);
 		ufo_icon_start.setVerticalAlignment(SwingConstants.TOP);
 		ufo_icon_start.setIcon(new ImageIcon(StartView.class.getResource("/de/thi/ufo/Resources/ufo_small.png")));
-		GridBagConstraints gbc_ufo_icon_start = new GridBagConstraints();
-		gbc_ufo_icon_start.insets = new Insets(0, 0, 0, 0);
-		gbc_ufo_icon_start.gridwidth = 18;
-		gbc_ufo_icon_start.gridx = 0;
-		gbc_ufo_icon_start.gridy = 1;
-		willkommen_top_panel.add(ufo_icon_start, gbc_ufo_icon_start);
+		ufo_icon_start.setBounds((450/2)-(205/2), 0, 205, 205);
+		willkommen_top_panel.add(ufo_icon_start);
 		
 		JLabel willkommen_zu_label = new JLabel("Willkommen zu");
 		willkommen_zu_label.setFont(new Font("Comic Sans MS", Font.BOLD, 31));
-		GridBagConstraints gbc_willkommen_zu_label = new GridBagConstraints();
-		gbc_willkommen_zu_label.anchor = GridBagConstraints.SOUTH;
-		gbc_willkommen_zu_label.gridheight = 2;
-		gbc_willkommen_zu_label.gridwidth = 5;
-		gbc_willkommen_zu_label.insets = new Insets(0, 0, 5, 5);
-		gbc_willkommen_zu_label.gridx = 6;
-		gbc_willkommen_zu_label.gridy = 2;
-		willkommen_top_panel.add(willkommen_zu_label, gbc_willkommen_zu_label);
+		willkommen_zu_label.setHorizontalAlignment(SwingConstants.CENTER);
+		willkommen_zu_label.setBounds(0, 220, 450, 50);
+		willkommen_top_panel.add(willkommen_zu_label);
 		
 		JLabel app_name_label = new JLabel("Deliver UFO");
 		app_name_label.setForeground(new Color(43, 120, 228));
 		app_name_label.setFont(new Font("Comic Sans MS", Font.PLAIN, 60));
-		GridBagConstraints gbc_app_name_label = new GridBagConstraints();
-		gbc_app_name_label.anchor = GridBagConstraints.NORTH;
-		gbc_app_name_label.gridheight = 4;
-		gbc_app_name_label.gridwidth = 14;
-		gbc_app_name_label.insets = new Insets(0, 0, 0, 5);
-		gbc_app_name_label.gridx = 2;
-		gbc_app_name_label.gridy = 4;
-		willkommen_top_panel.add(app_name_label, gbc_app_name_label);
+		app_name_label.setHorizontalAlignment(SwingConstants.CENTER);
+		app_name_label.setBounds(0, 280, 450, 70);
+		willkommen_top_panel.add(app_name_label);
 		
 		JPanel lower_panel = new JPanel();
 		lower_panel.setBackground(new Color(255, 255, 255));
@@ -114,13 +103,13 @@ public class StartView{
 		norden_label.setFont(new Font("Comic Sans MS", Font.ITALIC, 23));
 		norden_panel.add(norden_label);
 		
-		norden_text = new JTextField();
+		norden_text = new JTextField("-200", 10);
 		norden_text.setForeground(new Color(192, 192, 192));
 		norden_text.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
-		norden_text.setText("-200");
-		norden_panel.add(norden_text);
-		norden_text.setColumns(10);
-		
+		//norden_text.setText("-200");
+		//norden_text.setSize(new Dimension(100, 20));
+
+		norden_panel.add(norden_text);		
 		JPanel osten_panel = new JPanel();
 		osten_panel.setBackground(new Color(255, 255, 255));
 		zieleingabe_panel.add(osten_panel);

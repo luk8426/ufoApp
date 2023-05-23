@@ -3,6 +3,7 @@ package de.thi.ufo.App;
 import java.awt.Color;
 import java.awt.EventQueue;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import de.thi.ufo.UfoSim;
@@ -25,11 +26,12 @@ public class UfoApp {
 	
 	public UfoApp() {
 		sim = UfoSim.getInstance();
-		frame = new JFrame();
+		frame = new JFrame("Deliver UFO App");
 		start_view = new StartView(this);
 		target_view = new TargetView(this);
 		control_view = new ControlView(this);
 		ufo_model = new UfoModel(this);	
+		frame.setIconImage(new ImageIcon(StartView.class.getResource("/de/thi/ufo/Resources/ufo_small.png")).getImage());
 	}
 	
 	/**
@@ -52,7 +54,7 @@ public class UfoApp {
 		app.sim.openViewWindow();
 		while(app.ufo_model.getUfoState() != UfoState.TERMINATED) {
 			try {
-				Thread.sleep(10);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -81,7 +83,7 @@ public class UfoApp {
 						break;
 					case FLYING:
 						app.sim.setD((int) app.ufo_model.positions.horizontalOrientationToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())));
-						if (app.ufo_model.positions.horizontalDistanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())) < 1) {
+						if (app.ufo_model.positions.horizontalDistanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())) < Math.sqrt(50)) {
 							app.sim.setI(-90);
 							app.ufo_model.setFlyState(FlyState.DESCENDING);
 						}
@@ -108,18 +110,23 @@ public class UfoApp {
 						break;
 					}
 					app.control_view.update();
-					/*if(app.ufo_model.stop_requested) {
-						app.ufo_model.stop_requested = !app.ufo_model.stop_requested;
-						app.ufo_model.speed_before_stop = app.sim.getV();
-						app.ufo_model.speedhandler.setTargetSpeed(0);
+					if(app.ufo_model.stop_requested) {
+						if (app.ufo_model.speed_before_stop==0) {
+							app.ufo_model.speed_before_stop= app.sim.getV();
+							app.ufo_model.speedhandler.setTargetSpeed(0);
+						}
+						if (app.sim.getV() < 1) {
+							app.ufo_model.stop_requested = !app.ufo_model.stop_requested;
+							app.ufo_model.setUfoState(UfoState.STOPPED);
+						}
 					}
-					if ((app.ufo_model.getLoopsInCurrentState()>2)&&(app.ufo_model.getFlyState() != FlyState.WAITING)&&(app.sim.getV()<1))	app.ufo_model.setUfoState(UfoState.STOPPED);
-					*/
+					
 					break;
 				case STOPPED:
 					if (app.ufo_model.continue_requested) {
 						app.ufo_model.continue_requested = !app.ufo_model.continue_requested;
 						app.ufo_model.speedhandler.setTargetSpeed(app.ufo_model.speed_before_stop);
+						app.ufo_model.speed_before_stop = 0;
 						app.ufo_model.setUfoState(UfoState.STARTED);
 					}
 					app.control_view.update();
@@ -130,7 +137,6 @@ public class UfoApp {
 			default:
 				break;
 			}
-			app.ufo_model.setLoopsInCurrentState((app.ufo_model.getLoopsInCurrentState()+1)%10000);
 		}
 		System.exit(1);
 		//*/

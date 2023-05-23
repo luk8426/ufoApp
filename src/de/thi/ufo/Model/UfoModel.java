@@ -13,7 +13,6 @@ public class UfoModel {
 	public boolean stop_requested, continue_requested;
 	
 	private UfoApp app;
-	private int loops_in_current_state = 0;
 
 	
 	public UfoModel(UfoApp ufoapp) {
@@ -31,16 +30,7 @@ public class UfoModel {
 	}
 
 	public void setFlyState(FlyState fly_state) {
-		this.setLoopsInCurrentState(0);
 		this.fly_state = fly_state;
-	}
-
-	public int getLoopsInCurrentState() {
-		return loops_in_current_state;
-	}
-
-	public void setLoopsInCurrentState(int loops_in_current_state) {
-		this.loops_in_current_state = loops_in_current_state;
 	}
 
 	public UfoState getUfoState() {
@@ -48,7 +38,6 @@ public class UfoModel {
 	}
 
 	public void setUfoState(UfoState ufo_state) {
-		this.setLoopsInCurrentState(0);
 		this.ufo_state = ufo_state;
 	}
 }

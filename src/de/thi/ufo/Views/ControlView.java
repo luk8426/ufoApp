@@ -31,7 +31,6 @@ import javax.swing.JProgressBar;
 import javax.swing.ImageIcon;
 
 public class ControlView {
-	//public JFrame frame; // To be removed
 	private UfoApp app;
 	public Container content_pane;
 	private JLayeredPane top_layered_pane;
@@ -58,8 +57,10 @@ public class ControlView {
 	private JButton stop_btn;
 	private JButton return_btn;
 	
-	// Warnings
+	// Transparent Labels on Map
 	private JLabel warningLabel;
+	private JLabel controlsPane;
+
 
 	/**
 	 * Initialize the contents of the frame.
@@ -93,12 +94,24 @@ public class ControlView {
 		warningLabel.setForeground(Color.RED);
 		warningLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		top_layered_pane.add(warningLabel, 0);
+		controlsPane = new JLabel("");
+		controlsPane.setBounds(0, zielanzeige_panel.getBounds().height-60, 371, 60);
+		controlsPane.setBackground(new Color(176,224,230, 170));
+		controlsPane.setForeground(Color.RED);
+		controlsPane.setHorizontalAlignment(SwingConstants.CENTER);
+		top_layered_pane.add(controlsPane, 1);
+
 		
 		// Make additions to the map
-		
+		JLabel controlLabel = new JLabel("Steuerung");
+		controlLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 31));
+		controlLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		controlLabel.setBounds(0, zielanzeige_panel.getBounds().height-60, 371/2, 50);
+		top_layered_pane.add(controlLabel, 0);
 		ufo_icon = new RotateIcon();
 		stop_btn = new JButton();
 		stop_btn.setBorderPainted(false);
+		stop_btn.setFocusPainted(false);
 		stop_btn.setContentAreaFilled(false);
 		stop_btn.addActionListener(e -> {
 			if (app.ufo_model.getUfoState() == UfoState.STARTED)	app.ufo_model.stop_requested = true;
@@ -106,6 +119,7 @@ public class ControlView {
 		});
 		return_btn = new JButton();
 		return_btn.setBorderPainted(false);
+		return_btn.setFocusPainted(false);
 		return_btn.setContentAreaFilled(false);
 		return_btn.addActionListener(e -> {
 			app.ufo_model.positions.setDestination(new Simple3DPoint(0, 0));
@@ -113,8 +127,8 @@ public class ControlView {
 		});
 		
 		top_layered_pane.add(ufo_icon, 1);
-		top_layered_pane.add(stop_btn, 1);
-		top_layered_pane.add(return_btn, 1);
+		top_layered_pane.add(stop_btn, 0);
+		top_layered_pane.add(return_btn, 0);
 
 				
 // Here starts the lower Part of the App-Screen
@@ -266,7 +280,8 @@ public class ControlView {
 	}
 	
 	public void update() {
-		altitude_val.setText(Double.toString(Math.round(app.sim.getZ() * 100.0) / 100.0) + " m");
+		controlsPane.setOpaque(true);
+		altitude_val.setText(Long.toString(Math.round(app.sim.getZ())) + " m");
 		velocity_val.setText(Double.toString(Math.round(app.sim.getV() * 100.0) / 100.0) + " km/h");
 		vertical_val.setIcon(verticalIcon());
 		updateBatteryBar();
@@ -308,9 +323,14 @@ public class ControlView {
 			stop_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-gray.png")));
 			dest_reached_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/marker-check-gray.png")));
 			stop_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-red.png")));
-			stop_btn.setBounds(120, 280, 60, 60);
+			stop_btn.setBounds(230, zielanzeige_panel.getBounds().height-55, 80, 50);
+			stop_btn.setVerticalTextPosition(JLabel.CENTER);
+			stop_btn.setHorizontalTextPosition(JLabel.CENTER);
+
 			return_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-red.png")));
-			return_btn.setBounds(210, 280, 60, 60);	
+			return_btn.setBounds(290, zielanzeige_panel.getBounds().height-55, 80, 50);	
+			return_btn.setVerticalTextPosition(JLabel.CENTER);
+			return_btn.setHorizontalTextPosition(JLabel.CENTER);
 			break;
 		case STOPPED:
 			System.out.println("Black?");
