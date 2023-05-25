@@ -63,14 +63,12 @@ public class UfoApp {
 				case STARTED:
 					switch(app.ufo_model.getFlyState()) {
 					case WAITING:
-						//app.sim.requestDeltaV(10);	
 						app.ufo_model.speedhandler.setTargetSpeed(10);
 						app.sim.setD((int) app.ufo_model.positions.horizontalOrientationToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())));
 						app.ufo_model.setFlyState(FlyState.TAKEOFF);
 						break;
 					case TAKEOFF:
 						if (app.sim.getZ()>=10) {
-							//app.sim.requestDeltaV(40); // Now at total speed of 50 km/h	
 							app.ufo_model.speedhandler.setTargetSpeed(50);
 							app.ufo_model.setFlyState(FlyState.ASCENDING);
 						}
@@ -83,23 +81,22 @@ public class UfoApp {
 						break;
 					case FLYING:
 						app.sim.setD((int) app.ufo_model.positions.horizontalOrientationToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())));
-						if (app.ufo_model.positions.horizontalDistanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())) < Math.sqrt(50)) {
+						double horizontal_distance_to_destination = app.ufo_model.positions.horizontalDistanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY()));
+						if (horizontal_distance_to_destination < Math.sqrt(50)) {
 							app.sim.setI(-90);
 							app.ufo_model.setFlyState(FlyState.DESCENDING);
 						}
+						//else if (horizontal_distance_to_destination < 500)
+							//app.ufo_model.speedhandler.setTargetSpeed(15);
 						break;
 					case DESCENDING:
-						if (app.sim.getZ()<=30) {
-							//app.sim.requestDeltaV(-49); // Now at total speed of 1 km/h	
-							app.ufo_model.speedhandler.setTargetSpeed(1);
-							app.ufo_model.setFlyState(FlyState.LANDING);
-						}
+						app.ufo_model.speedhandler.setTargetSpeed(1);
+						app.ufo_model.setFlyState(FlyState.LANDING);
 						break;
 					case LANDING:
 						if (app.sim.getZ()<=0) {
 							app.sim.setI(0);
 							app.ufo_model.speedhandler.setTargetSpeed(0);
-							//app.sim.requestDeltaV(-40); // Now at total speed of 0 km/h	
 							app.ufo_model.setFlyState(FlyState.LANDED);
 						}
 						break;

@@ -5,18 +5,27 @@ import de.thi.ufo.Helper.UfoState;
 
 public class UfoPositions {
 	public static final int MAX_ALTITUDE = 50;
-	private static final int MAX_DISTANCE = 3000;
+	private static final int MAX_DISTANCE = 1000;
 	private double inital_distance = 0;
 	private Simple3DPoint destination;
 	private int desired_altitude;
 	private static boolean reached_desired_alt = false;
+	private static double map_scale = 0.2;
 	
 	public static int positionInMap(double ufo_position) {
-		return ((int)ufo_position/5)+ 170;
+		System.out.println(map_scale);
+		return ((int)(ufo_position*map_scale))+ 170;
 	}
 	
 	public boolean isDestinationValid() {
-		return (this.destination.horizontalDistanceFromOrigin()<=MAX_DISTANCE);
+		double dist = this.destination.horizontalDistanceFromOrigin();
+		System.out.println(dist);
+		if (dist<=MAX_DISTANCE) {
+			double newscale = (150/dist);
+			UfoPositions.map_scale = newscale; 
+			return true;
+		}
+		else return false;
 	}
 	
 	public double distanceToDestination(Simple3DPoint current_position) {

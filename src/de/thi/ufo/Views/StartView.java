@@ -2,19 +2,14 @@ package de.thi.ufo.Views;
 
 import java.awt.GridLayout;
 import javax.swing.JPanel;
-import java.awt.GridBagLayout;
 import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-
 import de.thi.ufo.App.RoundedPanel;
 import de.thi.ufo.App.UfoApp;
 import de.thi.ufo.Helper.Simple3DPoint;
+import de.thi.ufo.Model.UfoPositions;
 
-import java.awt.Insets;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Container;
@@ -39,11 +34,6 @@ public class StartView{
 		content_pane.setLayout(new GridLayout(2, 0));		
 		JPanel willkommen_top_panel = new JPanel();
 		content_pane.add(willkommen_top_panel);
-		//GridBagLayout gbl_willkommen_top_panel = new GridBagLayout();
-		//gbl_willkommen_top_panel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		//gbl_willkommen_top_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
-		//gbl_willkommen_top_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		//gbl_willkommen_top_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		willkommen_top_panel.setLayout(null);
 		willkommen_top_panel.setBackground(Color.WHITE);
 		
@@ -89,7 +79,7 @@ public class StartView{
 		zieleingabe_label.setHorizontalAlignment(SwingConstants.CENTER);
 		zieleingabe_panel.add(zieleingabe_label);
 		
-		JLabel entfernungen_label = new JLabel("Entfernungen in m");
+		JLabel entfernungen_label = new JLabel("Entfernungen:");
 		entfernungen_label.setFont(new Font("Comic Sans MS", Font.BOLD | Font.ITALIC, 24));
 		zieleingabe_panel.add(entfernungen_label);
 		
@@ -98,18 +88,27 @@ public class StartView{
 		zieleingabe_panel.add(norden_panel);
 		norden_panel.setLayout(new GridLayout(1, 2, 5, 0));
 		
+		
 		JLabel norden_label = new JLabel("Nach Norden: ");
 		norden_label.setHorizontalAlignment(SwingConstants.RIGHT);
 		norden_label.setFont(new Font("Comic Sans MS", Font.ITALIC, 23));
 		norden_panel.add(norden_label);
 		
+		JPanel norden_text_panel = new JPanel();
+		norden_text_panel.setBackground(new Color(255, 255, 255));
+		norden_text_panel.setLayout(null);
+		norden_panel.add(norden_text_panel);
 		norden_text = new JTextField("-200", 10);
-		norden_text.setForeground(new Color(192, 192, 192));
+		norden_text.setLocation(5, 7);
+		norden_text.setForeground(new Color(0, 0, 255, 100));
 		norden_text.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
-		//norden_text.setText("-200");
-		//norden_text.setSize(new Dimension(100, 20));
-
-		norden_panel.add(norden_text);		
+		norden_text.setSize(new Dimension(80, 35));
+		JLabel m_label_norden = new JLabel("m");
+		m_label_norden.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
+		m_label_norden.setBounds(90, 0, 40, 40);
+		norden_text_panel.add(m_label_norden);		
+		norden_text_panel.add(norden_text);		
+		
 		JPanel osten_panel = new JPanel();
 		osten_panel.setBackground(new Color(255, 255, 255));
 		zieleingabe_panel.add(osten_panel);
@@ -119,15 +118,22 @@ public class StartView{
 		osten_label.setHorizontalAlignment(SwingConstants.RIGHT);
 		osten_label.setFont(new Font("Comic Sans MS", Font.ITALIC, 23));
 		osten_panel.add(osten_label);
-		
-		osten_text = new JTextField();
+		JPanel osten_text_panel = new JPanel();
+		osten_text_panel .setBackground(new Color(255, 255, 255));
+		osten_text_panel .setLayout(null);
+		osten_panel.add(osten_text_panel);
+		osten_text = new JTextField("500", 10);
+		osten_text.setLocation(5, 7);
+		osten_text.setForeground(new Color(0, 0, 255, 100));
 		osten_text.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
-		osten_text.setForeground(new Color(192, 192, 192));
-		osten_text.setText("500");
-		osten_panel.add(osten_text);
-		osten_text.setColumns(10);
+		osten_text.setSize(new Dimension(80, 35));
+		JLabel m_label_osten = new JLabel("m");
+		m_label_osten.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
+		m_label_osten.setBounds(90, 0, 40, 40);
+		osten_text_panel.add(m_label_osten);		
+		osten_text_panel.add(osten_text);	
 		
-		JLabel flughoehe_label = new JLabel("Flugh\u00F6he in m");
+		JLabel flughoehe_label = new JLabel("Flugh\u00F6he: ");
 		flughoehe_label.setFont(new Font("Comic Sans MS", Font.BOLD | Font.ITALIC, 24));
 		zieleingabe_panel.add(flughoehe_label);
 		
@@ -141,27 +147,41 @@ public class StartView{
 		sollhoehe_label.setFont(new Font("Comic Sans MS", Font.ITALIC, 23));
 		hoehe_panel.add(sollhoehe_label);
 		
-		hoehe_text = new JTextField();
+		JPanel hoehe_text_panel = new JPanel();
+		hoehe_text_panel .setBackground(new Color(255, 255, 255));
+		hoehe_text_panel .setLayout(null);
+		hoehe_panel.add(hoehe_text_panel);
+		hoehe_text = new JTextField("30", 10);
+		hoehe_text.setLocation(5, 7);
+		hoehe_text.setForeground(new Color(0, 0, 255, 100));
 		hoehe_text.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
-		hoehe_text.setForeground(new Color(192, 192, 192));
-		hoehe_text.setText("30");
-		hoehe_panel.add(hoehe_text);
-		hoehe_text.setColumns(10);
+		hoehe_text.setSize(new Dimension(80, 35));
+		JLabel m_label_hoehe = new JLabel("m "); // + Integer.toString(UfoPositions.MAX_ALTITUDE));
+		m_label_hoehe.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
+		m_label_hoehe.setBounds(90, 0, 40, 40);
+		hoehe_text_panel.add(m_label_hoehe);		
+		hoehe_text_panel.add(hoehe_text);	
 		
 		JButton check_btn = new JButton("Ziel \u00FCberpr\u00FCfen");
 		check_btn.setBackground(new Color(255, 255, 255));
 		check_btn.addActionListener(e -> {
 			// Set Destination in Model
+			int osten_koord, norden_koord, hoehe;
 			try {
-				app.ufo_model.positions.setDestination(new Simple3DPoint(Integer.parseInt(osten_text.getText()),-Integer.parseInt(norden_text.getText())));
-				app.ufo_model.positions.setDesiredAltitude(Integer.parseInt(hoehe_text.getText()));
+				osten_koord = Integer.parseInt(osten_text.getText());
+				norden_koord = Integer.parseInt(norden_text.getText());
+				hoehe = Integer.parseInt(hoehe_text.getText());
 			}catch (NumberFormatException exception) {
 				return;
 			}
-			if (app.ufo_model.positions.isDestinationValid()) {
+			app.ufo_model.positions.setDestination(new Simple3DPoint(osten_koord, norden_koord));
+			app.ufo_model.positions.setDesiredAltitude(hoehe);
+			if (app.ufo_model.positions.isDestinationValid()&&hoehe<=UfoPositions.MAX_ALTITUDE) {
 				app.target_view.update();
 				app.frame.setContentPane(app.target_view.content_pane);
 				app.frame.revalidate();
+			}else {
+				// TODO
 			}
 		});
 		zieleingabe_panel.add(check_btn);

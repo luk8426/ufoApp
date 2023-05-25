@@ -56,6 +56,7 @@ public class ControlView {
 	private RotateIcon ufo_icon;
 	private JButton stop_btn;
 	private JButton return_btn;
+	private JLabel controlLabel;
 	
 	// Transparent Labels on Map
 	private JLabel warningLabel;
@@ -103,11 +104,11 @@ public class ControlView {
 
 		
 		// Make additions to the map
-		JLabel controlLabel = new JLabel("Steuerung");
+		controlLabel = new JLabel("Steuerung");
 		controlLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 31));
 		controlLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		controlLabel.setBounds(0, zielanzeige_panel.getBounds().height-60, 371/2, 50);
-		top_layered_pane.add(controlLabel, 0);
+		controlLabel.setVisible(false);
 		ufo_icon = new RotateIcon();
 		stop_btn = new JButton();
 		stop_btn.setBorderPainted(false);
@@ -129,6 +130,7 @@ public class ControlView {
 		top_layered_pane.add(ufo_icon, 1);
 		top_layered_pane.add(stop_btn, 0);
 		top_layered_pane.add(return_btn, 0);
+		top_layered_pane.add(controlLabel, 0);
 
 				
 // Here starts the lower Part of the App-Screen
@@ -292,7 +294,6 @@ public class ControlView {
 
 	private void updateUfoIcon() {
 		ufo_icon.setRotation(app.sim.getD());
-		ufo_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/navigation-blue.png")));
 		ufo_icon.setBounds(UfoPositions.positionInMap(app.sim.getX()), UfoPositions.positionInMap(app.sim.getY()), 50, 50);				
 	}
 	
@@ -318,7 +319,7 @@ public class ControlView {
 		if(warningLabel.getText()=="") warningLabel.setOpaque(false);
 		switch(app.ufo_model.getUfoState()) {
 		case STARTED:
-			System.out.println("Test");
+			//System.out.println("Test");
 			flying_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/airplane-green.png")));
 			stop_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-gray.png")));
 			dest_reached_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/marker-check-gray.png")));
@@ -326,14 +327,15 @@ public class ControlView {
 			stop_btn.setBounds(230, zielanzeige_panel.getBounds().height-55, 80, 50);
 			stop_btn.setVerticalTextPosition(JLabel.CENTER);
 			stop_btn.setHorizontalTextPosition(JLabel.CENTER);
-
 			return_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-red.png")));
 			return_btn.setBounds(290, zielanzeige_panel.getBounds().height-55, 80, 50);	
 			return_btn.setVerticalTextPosition(JLabel.CENTER);
 			return_btn.setHorizontalTextPosition(JLabel.CENTER);
+			controlLabel.setVisible(true);
+			ufo_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/navigation-blue.png")));
 			break;
 		case STOPPED:
-			System.out.println("Black?");
+			//System.out.println("Black?");
 			stop_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/play-button-inner-green.png")));
 			flying_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/airplane-gray.png")));
 			stop_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-red.png")));

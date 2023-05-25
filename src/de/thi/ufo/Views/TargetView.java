@@ -107,7 +107,7 @@ public class TargetView{
 		zieleingabe_label.setHorizontalAlignment(SwingConstants.CENTER);
 		zieleingabe_panel.add(zieleingabe_label);
 		
-		JLabel entfernungen_label = new JLabel("Entfernungen in m");
+		JLabel entfernungen_label = new JLabel("Entfernungen:");
 		entfernungen_label.setFont(new Font("Comic Sans MS", Font.BOLD | Font.ITALIC, 24));
 		zieleingabe_panel.add(entfernungen_label);
 		
@@ -144,7 +144,7 @@ public class TargetView{
 		osten_text.setText("500");
 		osten_panel.add(osten_text);
 		
-		JLabel flughoehe_label = new JLabel("Flugh\u00F6he in m");
+		JLabel flughoehe_label = new JLabel("Flugh\u00F6he:");
 		flughoehe_label.setBackground(new Color(255, 255, 255));
 		flughoehe_label.setFont(new Font("Comic Sans MS", Font.BOLD | Font.ITALIC, 24));
 		zieleingabe_panel.add(flughoehe_label);
@@ -188,9 +188,9 @@ public class TargetView{
 	}
 	
 	public void update() {
-		hoehe_text.setText(Integer.toString(app.ufo_model.positions.getDesiredAltitude()));
-		osten_text.setText(Double.toString(app.ufo_model.positions.getDestination().getX()));
-		norden_text.setText(Double.toString(app.ufo_model.positions.getDestination().getY()));
+		hoehe_text.setText(Integer.toString(app.ufo_model.positions.getDesiredAltitude())+" m");
+		osten_text.setText(Integer.toString((int) app.ufo_model.positions.getDestination().getX())+" m");
+		norden_text.setText(Integer.toString((int)app.ufo_model.positions.getDestination().getY())+" m");
 		dest.setBounds(
 				UfoPositions.positionInMap(app.ufo_model.positions.getDestination().getX()), 
 				UfoPositions.positionInMap(app.ufo_model.positions.getDestination().getY()), 
