@@ -1,4 +1,4 @@
-package de.thi.ufo.App;
+package de.thi.ufo.Helper;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -11,6 +11,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class RoundedPanel extends JPanel {
     private int roundTopLeft = 0;
     private int roundTopRight = 0;
@@ -23,6 +24,14 @@ public class RoundedPanel extends JPanel {
         this.roundTopLeft = round_level;
         this.roundTopRight = round_level;
     	setOpaque(false);
+    }
+    
+    public RoundedPanel(int round_level, boolean opaque) {
+        this.roundBottomLeft = round_level;
+        this.roundBottomRight = round_level;
+        this.roundTopLeft = round_level;
+        this.roundTopRight = round_level;
+    	setOpaque(opaque);
     }
 
     @Override

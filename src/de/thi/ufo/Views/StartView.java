@@ -1,13 +1,19 @@
 package de.thi.ufo.Views;
 
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
-import de.thi.ufo.App.RoundedPanel;
+
 import de.thi.ufo.App.UfoApp;
+import de.thi.ufo.Helper.RoundedPanel;
 import de.thi.ufo.Helper.Simple3DPoint;
+import de.thi.ufo.Helper.TextFieldFocusListener;
 import de.thi.ufo.Model.UfoPositions;
 
 import java.awt.Font;
@@ -24,6 +30,7 @@ public class StartView{
 	private JTextField norden_text;
 	private JTextField osten_text;
 	private JTextField hoehe_text;
+	private JPanel check_failed_panel;
 
 	/**
 	 * Initialize the contents of the frame.
@@ -31,11 +38,45 @@ public class StartView{
 	public StartView(UfoApp p_app) {
 		app = p_app;
 		content_pane = app.frame.getContentPane();
-		content_pane.setLayout(new GridLayout(2, 0));		
+		content_pane.setLayout(new GridLayout(2, 0));
+		JLayeredPane willkommen_layered_panel = new JLayeredPane();
+		willkommen_layered_panel.setLayout(null);
 		JPanel willkommen_top_panel = new JPanel();
-		content_pane.add(willkommen_top_panel);
+		willkommen_top_panel.setBounds(0, 0, 450, 400);
+		willkommen_layered_panel.add(willkommen_top_panel, -1);
+		content_pane.add(willkommen_layered_panel);
 		willkommen_top_panel.setLayout(null);
 		willkommen_top_panel.setBackground(Color.WHITE);
+		
+		check_failed_panel = new JPanel();//(25, true);
+		check_failed_panel.setVisible(false);
+		check_failed_panel.setBackground(new Color(176,224,230, 230));
+		check_failed_panel.setLayout(new GridLayout(1, 0));
+		check_failed_panel.setBounds(20, 0, 390, 210);	
+		
+		JPanel check_failed_text = new JPanel();
+		check_failed_text.setLayout(new GridLayout(3,1));
+		JLabel error = new JLabel();
+		error.setIcon(new ImageIcon(StartView.class.getResource("/de/thi/ufo/Resources/error.png")));
+		error.setHorizontalAlignment(SwingConstants.CENTER);
+		error.setVerticalAlignment(SwingConstants.BOTTOM);
+		JLabel invalid = new JLabel("Ungültige Werte");
+		invalid.setHorizontalAlignment(SwingConstants.CENTER);
+		invalid.setFont(new Font("Comic Sans MS", Font.BOLD, 27));
+		invalid.setForeground(Color.RED);
+		invalid.setBounds(0, 20, 370, 15);
+		JLabel reason_inv = new JLabel("");
+		reason_inv.setHorizontalAlignment(SwingConstants.CENTER);
+		reason_inv.setFont(new Font("Comic Sans MS", Font.BOLD, 18));
+		reason_inv.setBounds(0, 80, 370, 15);
+		check_failed_text.setBackground(new Color(176,224,230, 230));
+		check_failed_text.add(error);
+		check_failed_text.add(invalid);
+		check_failed_text.add(reason_inv);
+		check_failed_panel.add(check_failed_text);
+
+		willkommen_layered_panel.add(check_failed_panel, 0);
+
 		
 		JLabel ufo_icon_start = new JLabel("");
 		ufo_icon_start.setHorizontalAlignment(SwingConstants.CENTER);
@@ -59,7 +100,6 @@ public class StartView{
 		
 		JPanel lower_panel = new JPanel();
 		lower_panel.setBackground(new Color(255, 255, 255));
-		//frame.getContentPane().add(lower_panel);
 		content_pane.add(lower_panel);
 		lower_panel.setLayout(null);
 		
@@ -99,6 +139,14 @@ public class StartView{
 		norden_text_panel.setLayout(null);
 		norden_panel.add(norden_text_panel);
 		norden_text = new JTextField("-200", 10);
+		norden_text.addFocusListener(new TextFieldFocusListener(norden_text));
+		norden_text.addKeyListener(new KeyListener() {
+			@Override public void keyTyped(KeyEvent e) {}
+			@Override public void keyPressed(KeyEvent e) {}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				norden_text.setText(norden_text.getText().replaceAll("[^0-9|-]", ""));				
+			}});
 		norden_text.setLocation(5, 7);
 		norden_text.setForeground(new Color(0, 0, 255, 100));
 		norden_text.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
@@ -123,6 +171,14 @@ public class StartView{
 		osten_text_panel .setLayout(null);
 		osten_panel.add(osten_text_panel);
 		osten_text = new JTextField("500", 10);
+		osten_text.addFocusListener(new TextFieldFocusListener(osten_text));
+		osten_text.addKeyListener(new KeyListener() {
+			@Override public void keyTyped(KeyEvent e) {}
+			@Override public void keyPressed(KeyEvent e) {}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				osten_text.setText(osten_text.getText().replaceAll("[^0-9|-]", ""));				
+			}});
 		osten_text.setLocation(5, 7);
 		osten_text.setForeground(new Color(0, 0, 255, 100));
 		osten_text.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
@@ -152,6 +208,14 @@ public class StartView{
 		hoehe_text_panel .setLayout(null);
 		hoehe_panel.add(hoehe_text_panel);
 		hoehe_text = new JTextField("30", 10);
+		hoehe_text.addFocusListener(new TextFieldFocusListener(hoehe_text));
+		hoehe_text.addKeyListener(new KeyListener() {
+			@Override public void keyTyped(KeyEvent e) {}
+			@Override public void keyPressed(KeyEvent e) {}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				hoehe_text.setText(hoehe_text.getText().replaceAll("[^0-9]", ""));				
+			}});
 		hoehe_text.setLocation(5, 7);
 		hoehe_text.setForeground(new Color(0, 0, 255, 100));
 		hoehe_text.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
@@ -164,6 +228,7 @@ public class StartView{
 		
 		JButton check_btn = new JButton("Ziel \u00FCberpr\u00FCfen");
 		check_btn.setBackground(new Color(255, 255, 255));
+		check_btn.requestFocus();
 		check_btn.addActionListener(e -> {
 			// Set Destination in Model
 			int osten_koord, norden_koord, hoehe;
@@ -181,7 +246,13 @@ public class StartView{
 				app.frame.setContentPane(app.target_view.content_pane);
 				app.frame.revalidate();
 			}else {
-				// TODO
+				if(hoehe>UfoPositions.MAX_ALTITUDE) {
+					reason_inv.setText("Die Flughöhe ist auf maximal 50 m begrenzt");
+				}else {
+					reason_inv.setText("Das Ziel darf maximal 1000m entfernt sein");					
+				}
+				
+				check_failed_panel.setVisible(true);
 			}
 		});
 		zieleingabe_panel.add(check_btn);

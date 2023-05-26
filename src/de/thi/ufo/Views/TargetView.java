@@ -1,15 +1,13 @@
 package de.thi.ufo.Views;
 
 import java.awt.GridLayout;
-import java.awt.Rectangle;
-
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.SwingConstants;
 
-import de.thi.ufo.App.RoundedPanel;
 import de.thi.ufo.App.UfoApp;
+import de.thi.ufo.Helper.RoundedPanel;
 import de.thi.ufo.Helper.UfoState;
 import de.thi.ufo.Model.UfoPositions;
 
@@ -20,7 +18,6 @@ import java.awt.Container;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JTextField;
 
 public class TargetView{
 	public UfoApp app;
@@ -191,6 +188,7 @@ public class TargetView{
 		hoehe_text.setText(Integer.toString(app.ufo_model.positions.getDesiredAltitude())+" m");
 		osten_text.setText(Integer.toString((int) app.ufo_model.positions.getDestination().getX())+" m");
 		norden_text.setText(Integer.toString((int)app.ufo_model.positions.getDestination().getY())+" m");
+		app.control_view.warningLabel.setText("Absolute Distanz: "+Double.toString(Math.round(app.ufo_model.positions.getInitalDistance() * 100.0) / 100.0) + " m");
 		dest.setBounds(
 				UfoPositions.positionInMap(app.ufo_model.positions.getDestination().getX()), 
 				UfoPositions.positionInMap(app.ufo_model.positions.getDestination().getY()), 

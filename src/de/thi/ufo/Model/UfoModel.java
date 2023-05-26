@@ -9,11 +9,8 @@ public class UfoModel {
 	private UfoState ufo_state;
 	private FlyState fly_state;
 	public SpeedHandler speedhandler;
-	public int speed_before_stop = 0;
-	public boolean stop_requested, continue_requested;
-	
-	private UfoApp app;
-
+	public int speed_before_stop, speed_before_detour = 0;
+	public boolean stop_requested, continue_requested, return_requested_after_arrival = false;
 	
 	public UfoModel(UfoApp ufoapp) {
 		positions = new UfoPositions();
@@ -21,8 +18,7 @@ public class UfoModel {
 		setFlyState(FlyState.WAITING);
 		speedhandler = new SpeedHandler(ufoapp);
 		speedhandler.start();
-		stop_requested = false;		
-		this.app = ufoapp;
+		stop_requested = false;
 	}
 
 	public FlyState getFlyState() {

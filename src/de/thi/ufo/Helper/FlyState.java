@@ -5,6 +5,7 @@ public enum FlyState {
 	TAKEOFF,
 	ASCENDING,
 	FLYING,
+	DETOUR,
 	DESCENDING,
 	LANDING,
 	LANDED,

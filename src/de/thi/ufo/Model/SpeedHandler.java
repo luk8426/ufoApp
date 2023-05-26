@@ -4,20 +4,21 @@ import de.thi.ufo.App.UfoApp;
 import de.thi.ufo.Helper.UfoState;
 
 public class SpeedHandler extends Thread implements Runnable {
-	private int target_speed;
+	private int current_target_speed, new_target_speed;
 	private UfoApp app;
-
 	public SpeedHandler(UfoApp app) {
 		super();
-		target_speed = 0;
+		current_target_speed = 0;
+		new_target_speed = 0;
 		this.app = app;
 	}
 	
 	@Override
 	public void run() {
 		while(app.ufo_model.getUfoState() != UfoState.TERMINATED) {
-			int delta = this.target_speed - app.sim.getV();
-			if (Math.abs(delta) >= 1) {
+			int delta = new_target_speed - current_target_speed;
+			if (delta!=0){
+				current_target_speed = new_target_speed;
 				app.sim.requestDeltaV(delta);
 			}
 			try {
@@ -29,11 +30,12 @@ public class SpeedHandler extends Thread implements Runnable {
 	}
 
 	public int getTargetSpeed() {
-		return target_speed;
+		return current_target_speed;
 	}
 
 	public void setTargetSpeed(int target_speed) {
-		this.target_speed = target_speed;
+		//System.out.println(target_speed);
+		new_target_speed = target_speed;
 	}
 	
 }

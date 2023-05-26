@@ -1,7 +1,6 @@
 package de.thi.ufo.Model;
 
 import de.thi.ufo.Helper.Simple3DPoint;
-import de.thi.ufo.Helper.UfoState;
 
 public class UfoPositions {
 	public static final int MAX_ALTITUDE = 50;
@@ -13,15 +12,13 @@ public class UfoPositions {
 	private static double map_scale = 0.2;
 	
 	public static int positionInMap(double ufo_position) {
-		System.out.println(map_scale);
 		return ((int)(ufo_position*map_scale))+ 170;
 	}
 	
 	public boolean isDestinationValid() {
 		double dist = this.destination.horizontalDistanceFromOrigin();
-		System.out.println(dist);
 		if (dist<=MAX_DISTANCE) {
-			double newscale = (150/dist);
+			double newscale = (130/dist);
 			UfoPositions.map_scale = newscale; 
 			return true;
 		}
