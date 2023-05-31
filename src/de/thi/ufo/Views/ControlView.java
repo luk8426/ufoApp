@@ -303,8 +303,9 @@ public class ControlView {
 	}
 	
 	private void updateUfoIcon() {
-		ufo_icon.setRotation(app.sim.getD());
-		ufo_icon.setBounds(UfoPositions.positionInMap(app.sim.getX()), UfoPositions.positionInMap(app.sim.getY()), 50, 50);				
+		ufo_icon.setRotation(-app.sim.getD());
+		Simple3DPoint new_location = UfoPositions.positionInMap(new Simple3DPoint(app.sim.getX(), app.sim.getY()));
+		ufo_icon.setBounds((int)new_location.getX(), (int)new_location.getY(), 50, 50);				
 	}
 	
 	private void updateProgressBar() {

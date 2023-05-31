@@ -8,6 +8,7 @@ import javax.swing.SwingConstants;
 
 import de.thi.ufo.App.UfoApp;
 import de.thi.ufo.Helper.RoundedPanel;
+import de.thi.ufo.Helper.Simple3DPoint;
 import de.thi.ufo.Helper.UfoState;
 import de.thi.ufo.Model.UfoPositions;
 
@@ -120,7 +121,6 @@ public class TargetView{
 		
 		norden_text = new JLabel();
 		norden_text.setBackground(new Color(255, 255, 255));
-		//norden_text.setForeground(new Color(192, 192, 192));
 		norden_text.setFont(new Font("Comic Sans MS", Font.BOLD, 23));
 		norden_text.setText("-200");
 		norden_panel.add(norden_text);
@@ -137,7 +137,6 @@ public class TargetView{
 		
 		osten_text = new JLabel();
 		osten_text.setFont(new Font("Comic Sans MS", Font.BOLD, 23));
-		//osten_text.setForeground(new Color(192, 192, 192));
 		osten_text.setText("500");
 		osten_panel.add(osten_text);
 		
@@ -157,7 +156,6 @@ public class TargetView{
 		
 		hoehe_text = new JLabel();
 		hoehe_text.setFont(new Font("Comic Sans MS", Font.BOLD, 23));
-		//hoehe_text.setForeground(new Color(192, 192, 192));
 		hoehe_text.setText("30");
 		hoehe_panel.add(hoehe_text);
 		
@@ -189,9 +187,10 @@ public class TargetView{
 		osten_text.setText(Integer.toString((int) app.ufo_model.positions.getDestination().getX())+" m");
 		norden_text.setText(Integer.toString((int)app.ufo_model.positions.getDestination().getY())+" m");
 		app.control_view.warningLabel.setText("Absolute Distanz: "+Double.toString(Math.round(app.ufo_model.positions.getInitalDistance() * 100.0) / 100.0) + " m");
+		Simple3DPoint dest_data = UfoPositions.positionInMap(new Simple3DPoint(app.ufo_model.positions.getDestination().getX(), app.ufo_model.positions.getDestination().getY()));
 		dest.setBounds(
-				UfoPositions.positionInMap(app.ufo_model.positions.getDestination().getX()), 
-				UfoPositions.positionInMap(app.ufo_model.positions.getDestination().getY()), 
+				(int)dest_data.getX(), 
+				(int)dest_data.getY(), 
 				dest.getBounds().height, 
 				dest.getBounds().width);
 	}

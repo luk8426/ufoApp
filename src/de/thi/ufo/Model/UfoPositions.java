@@ -10,9 +10,13 @@ public class UfoPositions {
 	private int desired_altitude;
 	private static boolean reached_desired_alt = false;
 	private static double map_scale = 0.2;
-	
+	/*
 	public static int positionInMap(double ufo_position) {
 		return ((int)(ufo_position*map_scale))+ 170;
+	}*/
+
+	public static Simple3DPoint positionInMap(Simple3DPoint ufo_position) {
+		return new Simple3DPoint((((int)(ufo_position.getX()*map_scale))+ 170), ((-(int)(ufo_position.getY()*map_scale))+ 170));
 	}
 	
 	public boolean isDestinationValid() {
@@ -42,7 +46,8 @@ public class UfoPositions {
 	}
 	
 	public double horizontalOrientationToDestination(Simple3DPoint current_position) {
-		double orientation = (Math.atan2(UfoPositions.positionInMap(destination.getY())-UfoPositions.positionInMap(current_position.getY()), UfoPositions.positionInMap(destination.getX())-UfoPositions.positionInMap(current_position.getX()))*360/(2*Math.PI));
+		//double orientation = (Math.atan2(UfoPositions.positionInMap(destination.getY())-UfoPositions.positionInMap(current_position.getY()), UfoPositions.positionInMap(destination.getX())-UfoPositions.positionInMap(current_position.getX()))*360/(2*Math.PI));
+		double orientation = (Math.atan2(destination.getY()-current_position.getY(), destination.getX()-current_position.getX())*360/(2*Math.PI));
 		if (orientation<0) orientation += 360;
 		return orientation; 
 	}

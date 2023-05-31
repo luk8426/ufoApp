@@ -85,7 +85,7 @@ public class UfoApp {
 					case FLYING:
 						app.sim.setD((int) app.ufo_model.positions.horizontalOrientationToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())));
 						double horizontal_distance_to_destination = app.ufo_model.positions.horizontalDistanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY()));
-						if (horizontal_distance_to_destination < 8) {
+						if (horizontal_distance_to_destination < 1) {
 							app.sim.setI(-90);
 							app.ufo_model.setFlyState(FlyState.DESCENDING);
 						}
