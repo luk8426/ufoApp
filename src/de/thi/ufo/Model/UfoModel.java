@@ -10,7 +10,7 @@ public class UfoModel {
 	private FlyState fly_state;
 	public SpeedHandler speedhandler;
 	public int speed_before_stop, speed_before_detour = 0;
-	public boolean stop_requested, continue_requested, return_requested_after_arrival = false;
+	public boolean stop_requested, continue_requested, return_requested_after_arrival, disable_return = false;
 	
 	public UfoModel(UfoApp ufoapp) {
 		positions = new UfoPositions();

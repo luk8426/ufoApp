@@ -1,6 +1,7 @@
 package de.thi.ufo.Views;
 
 import java.awt.GridLayout;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -67,7 +68,7 @@ public class TargetView{
 		top_layered_pane.setLayout(null); // Means AbsoluteLayout
 		zielanzeige_panel.add(top_layered_pane);
 
-		JLabel map = new JLabel();
+		JLabel map = new JLabel(); 
 		map.setIcon(new ImageIcon(TargetView.class.getResource("/de/thi/ufo/Resources/map_background.jpg")));
 		map.setBounds(0, 0, 400, 400);
 		top_layered_pane.add(map, -1);

@@ -19,6 +19,7 @@ import de.thi.ufo.Model.UfoPositions;
 import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Container;
 
 import javax.swing.JButton;
@@ -123,9 +124,12 @@ public class ControlView {
 		return_btn.setContentAreaFilled(false);
 		return_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/return.png")));
 		return_btn.addActionListener(e -> {
-			app.ufo_model.positions.setDestination(new Simple3DPoint(0, 0));
-			return_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/return_green.png")));
-			if (app.ufo_model.getUfoState() == UfoState.ARRIVED)app.ufo_model.return_requested_after_arrival = true;
+			if(!app.ufo_model.disable_return) {
+				app.ufo_model.disable_return = true;
+				app.ufo_model.positions.setDestination(new Simple3DPoint(0, 0));
+				return_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/return_green.png")));
+				if (app.ufo_model.getUfoState() == UfoState.ARRIVED)app.ufo_model.return_requested_after_arrival = true;
+			}
 		});
 		
 		top_layered_pane.add(ufo_icon, 1);
@@ -239,6 +243,7 @@ public class ControlView {
 		progress_bar.setValue(20);
 		progress_bar.setBackground(Color.white);
 		progress_bar.setBorder(new EmptyBorder(5, 20, 5, 0));
+		progress_bar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		data_panel.add(progress_bar);
 		
 		JLabel altitude_txt = new JLabel("Flughoehe");
@@ -279,6 +284,7 @@ public class ControlView {
 		battery_bar.setForeground(new Color(0, 128, 0));
 		battery_bar.setBackground(Color.white);
 		battery_bar.setBorder(new EmptyBorder(5, 20, 5, 0));
+		battery_bar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		data_panel.add(battery_bar);
 	}
 	
@@ -310,9 +316,10 @@ public class ControlView {
 	
 	private void updateProgressBar() {
 		double remaining_distance = app.ufo_model.positions.distanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY(), app.sim.getZ()));
-		progress_bar.setString(Double.toString(Math.round(remaining_distance * 100.0) / 100.0) + " m");
+		progress_bar.setString(Double.toString(Math.round((Math.abs(remaining_distance-1)) * 100.0) / 100.0) + " m");
 		progress_bar.setValue((int) (100 * (1-(remaining_distance/app.ufo_model.positions.getInitalDistance()))));
 		if (progress_bar.getValue() >= 97) progress_bar.setForeground(new Color(0, 128, 0));
+		else progress_bar.setForeground(new Color(43, 120, 228));
 	}
 
 	private void updateBatteryBar() {

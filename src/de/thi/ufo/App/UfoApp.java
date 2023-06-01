@@ -52,10 +52,11 @@ public class UfoApp {
 			}
 		});
 		app.sim.openViewWindow();
-		app.sim.setSpeedup(3);
+		//app.sim.setSpeedup(3);
 		int periodic_check = 1000;
 		app.start_view.content_pane.requestFocusInWindow();
 		while(app.ufo_model.getUfoState() != UfoState.TERMINATED) {
+			System.out.println(app.ufo_model.getUfoState());
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
@@ -102,16 +103,29 @@ public class UfoApp {
 						if (app.sim.getV()==0) {
 							app.sim.setD((int) app.ufo_model.positions.horizontalOrientationToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY())));							
 							if(app.sim.getRadar()==-1) {
-								System.out.println("Test");
 								app.ufo_model.speedhandler.setTargetSpeed(app.ufo_model.speed_before_detour);
 								app.ufo_model.setFlyState(FlyState.FLYING);
 							}
 							else {
-								for (int i = 0; i < 360; i++) {
-									app.sim.setD(app.sim.getD()+1*(-1*(i%2)));
-									if(app.sim.getRadar()==-1)break;
+								int d2test = app.sim.getD();
+								double radar = app.sim.getRadar();
+								for (int i = 1; i < 360; i++) {
+									int curD = d2test + 5* i * (int)Math.pow(-1,(i%2));
+									if (curD < 0) curD +=360;
+									else if (curD > 359) curD -=360;
+									app.sim.setD(curD);
+									while(app.sim.getRadar()==radar);
+									radar = app.sim.getRadar();
+									if(radar==-1) {System.out.println("FoundDir");break;}
 								}
 								app.ufo_model.speedhandler.setTargetSpeed(5);
+								while(app.sim.getV()==0)
+									try {
+										// Necessary to allow the sim thread to proceed
+										Thread.sleep(1);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
 							}
 						}else {
 							periodic_check--;

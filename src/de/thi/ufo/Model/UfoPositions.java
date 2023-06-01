@@ -22,7 +22,7 @@ public class UfoPositions {
 	public boolean isDestinationValid() {
 		double dist = this.destination.horizontalDistanceFromOrigin();
 		if (dist<=MAX_DISTANCE) {
-			double newscale = (130/dist);
+			double newscale = (100/dist);
 			UfoPositions.map_scale = newscale; 
 			return true;
 		}
@@ -77,5 +77,9 @@ public class UfoPositions {
 		}
 		return inital_distance;
 	};
+	
+	public double getMapScale() {
+		return UfoPositions.map_scale;
+	}
 	
 }
