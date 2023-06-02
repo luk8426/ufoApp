@@ -34,6 +34,7 @@ public class StartView{
 	private JTextField norden_text;
 	private JTextField osten_text;
 	private JTextField hoehe_text;
+	public JButton check_btn;
 	private JPanel check_failed_panel;
 
 	public StartView(UfoApp p_app) {
@@ -81,6 +82,8 @@ public class StartView{
 		check_failed_panel.add(check_failed_text);
 
 		willkommen_layered_panel.add(check_failed_panel, 0);
+		JTextField focus_here = new JTextField();
+		willkommen_layered_panel.add(focus_here, 10);
 
 		// Der eigentliche Inhalt der oberen Hälfte wird hier festgelegt
 		JLabel ufo_icon_start = new JLabel("");
@@ -237,9 +240,8 @@ public class StartView{
 		hoehe_text_panel.add(hoehe_text);	
 		
 		// Zuletzt werden noch die beiden Knöpfe gebaut und konfiguriert
-		JButton check_btn = new JButton("Ziel \u00FCberpr\u00FCfen");
+		check_btn = new JButton("Ziel \u00FCberpr\u00FCfen");
 		check_btn.setBackground(new Color(255, 255, 255));
-		check_btn.requestFocus();
 		check_btn.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
 		check_btn.setBackground(new Color(0, 0, 255, 50));
 		check_btn.addActionListener(e -> {

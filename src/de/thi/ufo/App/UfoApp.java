@@ -1,7 +1,5 @@
 package de.thi.ufo.App;
 
-import java.awt.EventQueue;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -43,22 +41,10 @@ public class UfoApp {
 	 */
 	public static void main(String[] args) {
 		UfoApp app = new UfoApp();
-		// Um das aufploppende Fenster nicht direkt zu fokussieren wird dieses in einem zusätzlichen Thread sichtbar gemacht
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					app.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}	
-
-			}
-		});
-		app.sim.openViewWindow();
-		//app.sim.setSpeedup(3);
+		// Um das aufploppende Fenster nicht direkt zu fokussieren wird dieses erst nach einem zusätzlichen Thread sichtbar gemacht
+		app.frame.setVisible(true);;
 		// Der periodic_check wird benutzt um Hindernisse zu umfliegen
 		int periodic_check = 1000;
-		//app.start_view.content_pane.requestFocusInWindow();
 		////////////////////////////////////////////
 		// Die eigentliche Hauptprogramm-Schleife://
 		////////////////////////////////////////////
@@ -89,7 +75,7 @@ public class UfoApp {
 					case ASCENDING:
 						// Überprüfen ob gewünschte Flughöhe erreicht wurde und gegebenenfalls reagieren
 						if (app.sim.getZ()>=app.ufo_model.positions.getDesiredAltitude()) {
-							app.ufo_model.speedhandler.setTargetSpeed(50);
+							app.ufo_model.speedhandler.setTargetSpeed(30);
 							app.sim.setI(0);	
 							app.ufo_model.setFlyState(FlyState.FLYING);
 						}

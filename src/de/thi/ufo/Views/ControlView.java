@@ -303,15 +303,19 @@ public class ControlView {
 		};
 	}
 	
+	// Unser UFO bewegen
 	private void updateUfoIcon() {
 		ufo_icon.setRotation(-app.sim.getD());
 		Simple3DPoint new_location = UfoPositions.positionInMap(new Simple3DPoint(app.sim.getX(), app.sim.getY()));
 		ufo_icon.setBounds((int)new_location.getX(), (int)new_location.getY(), 50, 50);				
 	}
 	
+	// Die Fortschrittsbalken aktualisieren
 	private void updateProgressBar() {
 		double remaining_distance = app.ufo_model.positions.distanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY(), app.sim.getZ()));
-		progress_bar.setString(Double.toString(Math.round((Math.abs(remaining_distance-1)) * 100.0) / 100.0) + " m");
+		remaining_distance = Math.round((Math.abs(remaining_distance-1)) * 100.0) / 100.0;
+		progress_bar.setString(Double.toString(remaining_distance) + " m");
+		if (remaining_distance < 0) remaining_distance = 0;
 		progress_bar.setValue((int) (100 * (1-(remaining_distance/app.ufo_model.positions.getInitalDistance()))));
 		if (progress_bar.getValue() >= 97) progress_bar.setForeground(new Color(0, 128, 0));
 		else progress_bar.setForeground(new Color(43, 120, 228));
