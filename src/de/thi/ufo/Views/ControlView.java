@@ -19,7 +19,6 @@ import de.thi.ufo.Model.UfoPositions;
 import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.ComponentOrientation;
 import java.awt.Container;
 
 import javax.swing.JButton;
@@ -120,6 +119,8 @@ public class ControlView {
 			if (app.ufo_model.getUfoState() == UfoState.STARTED)		app.ufo_model.stop_requested = true;
 			else if(app.ufo_model.getUfoState() == UfoState.STOPPED) 	app.ufo_model.continue_requested = true;
 		});
+		stop_btn.setVerticalTextPosition(JLabel.BOTTOM);
+		stop_btn.setHorizontalTextPosition(JLabel.CENTER);
 		return_btn = new JButton();
 		return_btn.setBorderPainted(false);
 		return_btn.setFocusPainted(false);
@@ -133,6 +134,8 @@ public class ControlView {
 				if (app.ufo_model.getUfoState() == UfoState.ARRIVED)app.ufo_model.return_requested_after_arrival = true;
 			}
 		});
+		return_btn.setVerticalTextPosition(JLabel.BOTTOM);
+		return_btn.setHorizontalTextPosition(JLabel.CENTER);
 		
 		// Und natürlich darf auch das UFO nicht auf der Karte fehlen
 		ufo_icon = new RotateIcon();
@@ -264,7 +267,7 @@ public class ControlView {
 		progress_bar.setValue(20);
 		progress_bar.setBackground(Color.white);
 		progress_bar.setBorder(new EmptyBorder(5, 20, 5, 0));
-		progress_bar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		//progress_bar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		data_panel.add(progress_bar);
 		
 		JLabel battery_txt = new JLabel("Batterieladung");
@@ -277,7 +280,7 @@ public class ControlView {
 		battery_bar.setForeground(new Color(0, 128, 0));
 		battery_bar.setBackground(Color.white);
 		battery_bar.setBorder(new EmptyBorder(5, 20, 5, 0));
-		battery_bar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		//battery_bar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		data_panel.add(battery_bar);
 	}
 	
@@ -342,31 +345,34 @@ public class ControlView {
 			if (app.ufo_model.stop_requested) { 
 				stop_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-orange.png")));
 				text_for_warning.setNewText("Das Ufo wird angehalten", 1);
-			}else 								
+			}else { 								
 				stop_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-red.png")));
-			stop_btn.setBounds(zielanzeige_panel.getBounds().width-90, zielanzeige_panel.getBounds().height-55, 80, 50);
-			stop_btn.setVerticalTextPosition(JLabel.CENTER);
-			stop_btn.setHorizontalTextPosition(JLabel.CENTER);
-			return_btn.setBounds(10, zielanzeige_panel.getBounds().height-55, 80, 50);	
-			return_btn.setVerticalTextPosition(JLabel.CENTER);
-			return_btn.setHorizontalTextPosition(JLabel.CENTER);
+				stop_btn.setText("Stop");
+			}
+			stop_btn.setBounds(zielanzeige_panel.getBounds().width-90, zielanzeige_panel.getBounds().height-60, 90, 60);
+			return_btn.setBounds(10, zielanzeige_panel.getBounds().height-59, 80, 60);	
+			return_btn.setText("Return");
 			controlLabel.setVisible(true);
 			ufo_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/navigation-blue.png")));
 			break;
 		case STOPPED:
 			stop_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/play-button-inner-green.png")));
+			stop_btn.setText("Resume");
 			flying_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/airplane-gray.png")));
 			stop_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-red.png")));
 			text_for_warning.setNewText("Das Ufo wurde angehalten", 1);			
 			break;
 		case ARRIVED:
 			stop_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/stop-button-inner-gray.png")));
+			stop_btn.setText("");
 			flying_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/airplane-gray.png")));
 			dest_reached_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/marker-check-green.png")));
 			ufo_icon.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/navigation-green.png")));
 			text_for_warning.setNewText("Das Ufo ist gelandet", 0);
-			if (app.ufo_model.disable_return&&app.ufo_model.positions.distanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY(), app.sim.getZ()))<3) 
+			if (app.ufo_model.disable_return&&app.ufo_model.positions.distanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY(), app.sim.getZ()))<3) { 
 				return_btn.setIcon(new ImageIcon(ControlView.class.getResource("/de/thi/ufo/Resources/return-gray.png")));
+				return_btn.setText("");
+			}
 			
 		default:
 			break;

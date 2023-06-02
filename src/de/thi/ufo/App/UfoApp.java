@@ -20,7 +20,7 @@ public class UfoApp {
 	public TargetView target_view;
 	public ControlView control_view;
 	public UfoModel ufo_model;
-	
+
 	
 	public UfoApp() {
 		// Initalisiere die App und konfiguriere das Fenster
