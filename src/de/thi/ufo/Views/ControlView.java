@@ -314,8 +314,8 @@ public class ControlView {
 	private void updateProgressBar() {
 		double remaining_distance = app.ufo_model.positions.distanceToDestination(new Simple3DPoint(app.sim.getX(), app.sim.getY(), app.sim.getZ()));
 		remaining_distance = Math.round((Math.abs(remaining_distance-1)) * 100.0) / 100.0;
+		if (remaining_distance < 1) remaining_distance = 0;
 		progress_bar.setString(Double.toString(remaining_distance) + " m");
-		if (remaining_distance < 0) remaining_distance = 0;
 		progress_bar.setValue((int) (100 * (1-(remaining_distance/app.ufo_model.positions.getInitalDistance()))));
 		if (progress_bar.getValue() >= 97) progress_bar.setForeground(new Color(0, 128, 0));
 		else progress_bar.setForeground(new Color(43, 120, 228));
