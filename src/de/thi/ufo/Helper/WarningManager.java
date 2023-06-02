@@ -1,5 +1,9 @@
 package de.thi.ufo.Helper;
 
+/////////////////////////////////////////////////////////////////////
+//Hilfsklasse um zu regeln welcher Warn-oder Infotext angezeigt wird//
+/////////////////////////////////////////////////////////////////////
+
 public class WarningManager {
 	private String warning_text;
 	private int current_prio = 100;

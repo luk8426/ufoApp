@@ -21,6 +21,10 @@ import java.awt.Container;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+//////////////////////////////////////////////////
+//GUI um die Karte mit Ziel erstmalig anzuzeigen//
+//////////////////////////////////////////////////
+
 public class TargetView{
 	public UfoApp app;
 	public Container content_pane;
@@ -32,25 +36,19 @@ public class TargetView{
 	
 	private JLabel dest;
 	private JLabel start;
-	
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
 	public TargetView(UfoApp p_app) {
 		app = p_app;
-		//frame.setBounds(100, 100, 450, 800);
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//frame.getContentPane().setLayout(new GridLayout(2, 0));
+		
+		// Erneut die identische Zweiteilung des Fensters
 		content_pane = new Container();
 		content_pane.setLayout(new GridLayout(2, 0));
 		
-// Here starts the upper Part of the App-Screen
-
+		// Zunächst wird der obere Teil erstellt
 		JPanel upper_panel = new JPanel();
 		upper_panel.setBackground(new Color(255, 255, 255));
-		//frame.getContentPane().add(upper_panel);
 		content_pane.add(upper_panel);
-		upper_panel.setLayout(null);
+		upper_panel.setLayout(null); // AbsoluteLayout
 		
 		JPanel blue_frame_upper = new RoundedPanel(35);
 		blue_frame_upper.setBounds(10, 11, 414, 369);
@@ -65,28 +63,28 @@ public class TargetView{
 		
 		
 		top_layered_pane = new JLayeredPane();
-		top_layered_pane.setLayout(null); // Means AbsoluteLayout
+		top_layered_pane.setLayout(null); 
 		zielanzeige_panel.add(top_layered_pane);
 
+		// Lege in das obere Panel die Map mit den jeweiligen Zielen
 		JLabel map = new JLabel(); 
 		map.setIcon(new ImageIcon(TargetView.class.getResource("/de/thi/ufo/Resources/map_background.jpg")));
 		map.setBounds(0, 0, 400, 400);
 		top_layered_pane.add(map, -1);
 		start = new JLabel();
-		start.setIcon(new ImageIcon(TargetView.class.getResource("/de/thi/ufo/Resources/up_start.png")));
+		start.setIcon(new ImageIcon(TargetView.class.getResource("/de/thi/ufo/Resources/home.png")));
 		start.setBounds(200-30, 200-30, 30, 30);
 		top_layered_pane.add(start, 0);
 		dest = new JLabel();
-		dest.setIcon(new ImageIcon(TargetView.class.getResource("/de/thi/ufo/Resources/down_land.png")));
+		dest.setIcon(new ImageIcon(TargetView.class.getResource("/de/thi/ufo/Resources/target.png")));
 		dest.setBounds(100, 100, 30, 30);
 		top_layered_pane.add(dest, 1);
 
 		
-// Here starts the lower Part of the App-Screen
-	
+		// Ab hier geht es um den unteren Teil des Fensters
+		// Dies dient nur als Anzeige und hat bis auf die Buttons am Ende keine Interaktivität
 		JPanel lower_panel = new JPanel();
 		lower_panel.setBackground(new Color(255, 255, 255));
-		//frame.getContentPane().add(lower_panel);
 		content_pane.add(lower_panel);
 		lower_panel.setLayout(null);
 		
@@ -148,7 +146,7 @@ public class TargetView{
 		
 		JPanel hoehe_panel = new JPanel();
 		zieleingabe_panel.add(hoehe_panel);
-		hoehe_panel.setLayout(new GridLayout(1, 2, 5, 0));
+		hoehe_panel.setLayout(new GridLayout(1, 2, 5, 50));
 		
 		JLabel sollhoehe_label = new JLabel("Soll-H\u00F6he: ");
 		sollhoehe_label.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -160,22 +158,29 @@ public class TargetView{
 		hoehe_text.setText("30");
 		hoehe_panel.add(hoehe_text);
 		
+		// Ein eigenes Panel um die Buttons schön symetrisch auszurichten
 		JPanel button_panel = new JPanel();
 		zieleingabe_panel.add(button_panel);
 		button_panel.setLayout(new GridLayout(1, 2, 5, 0));
 		
 		JButton back_btn = new JButton("Zurück");
+		back_btn.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
+		back_btn.setBackground(new Color(0, 0, 255, 30));
 		back_btn.addActionListener(e -> {
+			// Gehe zu vorherigen Fenster zurück
 			app.frame.setContentPane(app.start_view.content_pane);
 			app.frame.revalidate();
 		});
 		button_panel.add(back_btn);
 		JButton start_btn = new JButton("Start");
+		start_btn.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
+		start_btn.setBackground(new Color(0, 0, 255, 30));
 		start_btn.addActionListener(e -> {
 			zielanzeige_panel.remove(top_layered_pane);
 			app.control_view.absolute_distance_label_val.setText(Double.toString(Math.round(app.ufo_model.positions.getInitalDistance() * 100.0) / 100.0) + " m");
 			app.frame.setContentPane(app.control_view.content_pane);
 			app.control_view.zielanzeige_panel.add(top_layered_pane);
+			// Starte die Simulation und passe den Zustand des UFOs an
 			app.sim.setSpeedup(1);
 			app.ufo_model.setUfoState(UfoState.STARTED);
 			app.frame.revalidate();

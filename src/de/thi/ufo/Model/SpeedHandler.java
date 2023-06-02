@@ -3,6 +3,11 @@ package de.thi.ufo.Model;
 import de.thi.ufo.App.UfoApp;
 import de.thi.ufo.Helper.UfoState;
 
+////////////////////////////////////////////////////////////////
+//Thread um die Geschwindigkeit des UFOs gezielt setzen können//
+// Stellt eine Art Regler dar								  //
+////////////////////////////////////////////////////////////////
+
 public class SpeedHandler extends Thread implements Runnable {
 	private int current_target_speed, new_target_speed;
 	private UfoApp app;
@@ -34,7 +39,6 @@ public class SpeedHandler extends Thread implements Runnable {
 	}
 
 	public void setTargetSpeed(int target_speed) {
-		//System.out.println(target_speed);
 		new_target_speed = target_speed;
 	}
 	

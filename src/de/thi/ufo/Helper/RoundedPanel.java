@@ -11,6 +11,10 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JPanel;
 
+////////////////////////////////////////////////
+//Hilfsklasse um abgerundete Ecken abzubilden //
+////////////////////////////////////////////////
+
 @SuppressWarnings("serial")
 public class RoundedPanel extends JPanel {
     private int roundTopLeft = 0;

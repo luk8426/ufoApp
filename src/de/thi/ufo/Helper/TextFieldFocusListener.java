@@ -6,6 +6,10 @@ import java.awt.event.FocusListener;
 
 import javax.swing.JTextField;
 
+///////////////////////////////////////////////////////////////////////////
+//Hilfsklasse um Text zu entfernen beim initalen Klicken in das Textfeld// 
+///////////////////////////////////////////////////////////////////////////
+
 public class TextFieldFocusListener implements FocusListener {
     private boolean first_focus;
     private JTextField textfield;

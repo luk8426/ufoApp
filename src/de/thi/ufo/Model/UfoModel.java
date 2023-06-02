@@ -4,6 +4,10 @@ import de.thi.ufo.App.UfoApp;
 import de.thi.ufo.Helper.FlyState;
 import de.thi.ufo.Helper.UfoState;
 
+/////////////////////////////////////////////////////////////////////////////
+//Hilfsklasse um die gesamten Daten abgesehen von der Simulaton zu bündeln //
+/////////////////////////////////////////////////////////////////////////////
+
 public class UfoModel {
 	public UfoPositions positions;
 	private UfoState ufo_state;

@@ -24,6 +24,10 @@ import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
+//////////////////////////////
+//Das GUI für die Startseite//
+//////////////////////////////
+
 public class StartView{
 	private UfoApp app;
 	public Container content_pane;
@@ -32,13 +36,13 @@ public class StartView{
 	private JTextField hoehe_text;
 	private JPanel check_failed_panel;
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	public StartView(UfoApp p_app) {
 		app = p_app;
+		// Das gesamte Fenster ist die content_pane; es wird zweigeteilt
 		content_pane = app.frame.getContentPane();
 		content_pane.setLayout(new GridLayout(2, 0));
+		
+		// Der obere Teil der Startseite mit Logo und Text
 		JLayeredPane willkommen_layered_panel = new JLayeredPane();
 		willkommen_layered_panel.setLayout(null);
 		JPanel willkommen_top_panel = new JPanel();
@@ -48,12 +52,13 @@ public class StartView{
 		willkommen_top_panel.setLayout(null);
 		willkommen_top_panel.setBackground(Color.WHITE);
 		
-		check_failed_panel = new JPanel();//(25, true);
+		// Bei fehlerhafter Eingabe soll hierüber die Info aufgezeigt werden:
+		// Dazu muss die Infobox formatiert, mit Inhalt angereichert und der oberen Hälfte des Fensters hinzugefügt werde
+		check_failed_panel = new JPanel();
 		check_failed_panel.setVisible(false);
 		check_failed_panel.setBackground(new Color(176,224,230, 230));
 		check_failed_panel.setLayout(new GridLayout(1, 0));
 		check_failed_panel.setBounds(20, 0, 390, 210);	
-		
 		JPanel check_failed_text = new JPanel();
 		check_failed_text.setLayout(new GridLayout(3,1));
 		JLabel error = new JLabel();
@@ -77,7 +82,7 @@ public class StartView{
 
 		willkommen_layered_panel.add(check_failed_panel, 0);
 
-		
+		// Der eigentliche Inhalt der oberen Hälfte wird hier festgelegt
 		JLabel ufo_icon_start = new JLabel("");
 		ufo_icon_start.setHorizontalAlignment(SwingConstants.CENTER);
 		ufo_icon_start.setVerticalAlignment(SwingConstants.TOP);
@@ -98,6 +103,8 @@ public class StartView{
 		app_name_label.setBounds(0, 280, 450, 70);
 		willkommen_top_panel.add(app_name_label);
 		
+		
+		// Ab hier wird die untere Hälfte des Fensters aufgebaut
 		JPanel lower_panel = new JPanel();
 		lower_panel.setBackground(new Color(255, 255, 255));
 		content_pane.add(lower_panel);
@@ -145,6 +152,7 @@ public class StartView{
 			@Override public void keyPressed(KeyEvent e) {}
 			@Override
 			public void keyReleased(KeyEvent e) {
+				// Beachte dass nur Zahlen und ein - eingegeben werden darf
 				norden_text.setText(norden_text.getText().replaceAll("[^0-9|-]", ""));				
 			}});
 		norden_text.setLocation(5, 7);
@@ -177,6 +185,7 @@ public class StartView{
 			@Override public void keyPressed(KeyEvent e) {}
 			@Override
 			public void keyReleased(KeyEvent e) {
+				// s.o.
 				osten_text.setText(osten_text.getText().replaceAll("[^0-9|-]", ""));				
 			}});
 		osten_text.setLocation(5, 7);
@@ -214,38 +223,46 @@ public class StartView{
 			@Override public void keyPressed(KeyEvent e) {}
 			@Override
 			public void keyReleased(KeyEvent e) {
+				// Für die Höhe sind ausschließlich Zahlen erlaubt
 				hoehe_text.setText(hoehe_text.getText().replaceAll("[^0-9]", ""));				
 			}});
 		hoehe_text.setLocation(5, 7);
 		hoehe_text.setForeground(new Color(0, 0, 255, 100));
 		hoehe_text.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
 		hoehe_text.setSize(new Dimension(80, 35));
-		JLabel m_label_hoehe = new JLabel("m "); // + Integer.toString(UfoPositions.MAX_ALTITUDE));
+		JLabel m_label_hoehe = new JLabel("m ");
 		m_label_hoehe.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
 		m_label_hoehe.setBounds(90, 0, 40, 40);
 		hoehe_text_panel.add(m_label_hoehe);		
 		hoehe_text_panel.add(hoehe_text);	
 		
+		// Zuletzt werden noch die beiden Knöpfe gebaut und konfiguriert
 		JButton check_btn = new JButton("Ziel \u00FCberpr\u00FCfen");
 		check_btn.setBackground(new Color(255, 255, 255));
 		check_btn.requestFocus();
+		check_btn.setFont(new Font("Comic Sans MS", Font.PLAIN, 23));
+		check_btn.setBackground(new Color(0, 0, 255, 50));
 		check_btn.addActionListener(e -> {
-			// Set Destination in Model
+			// Setze im Model das Ziel auf die eingegebenen Werte
 			int osten_koord, norden_koord, hoehe;
 			try {
 				osten_koord = Integer.parseInt(osten_text.getText());
 				norden_koord = Integer.parseInt(norden_text.getText());
 				hoehe = Integer.parseInt(hoehe_text.getText());
 			}catch (NumberFormatException exception) {
+				reason_inv.setText("Gib bitte gültige Werte ein");
+				check_failed_panel.setVisible(true);
 				return;
 			}
 			app.ufo_model.positions.setDestination(new Simple3DPoint(osten_koord, norden_koord));
 			app.ufo_model.positions.setDesiredAltitude(hoehe);
+			// Es wird implizit die Skalierung errechnet
 			if (app.ufo_model.positions.isDestinationValid()&&hoehe<=UfoPositions.MAX_ALTITUDE) {
 				app.target_view.update();
 				app.frame.setContentPane(app.target_view.content_pane);
 				app.frame.revalidate();
 			}else {
+				// Bei Fehlerhafter eingabe sollen Pop-Ups auftauchen
 				if(hoehe>UfoPositions.MAX_ALTITUDE) {
 					reason_inv.setText("Die Flughöhe ist auf maximal 50 m begrenzt");
 				}else {
